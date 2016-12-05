@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h2>Contest</h2>
+	<a href="contest/create" class="btn btn-default">Add Contest</a>
+	<table class="table table-hover">
+	    <thead>
+	      <tr>
+	        <th>Name</th>
+	        <th>Start date</th>
+	        <th>End date</th>
+	        <th>Status</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+			{% for contest in contests %}
+		      <tr>
+		        <td>{{contest.name}}</td>
+		        <td></td>
+		        <td></td>
+		        <td>{{contest.status}}</td>
+				<td>
+					<a href="contest/details/{{contest.id}}" class="btn btn-success">view</a>
+					<a href="contest/edit/{{contest.id}}" class="btn btn-default">edit</a>
+					<a href="contest/delete/{{contest.id}}" class="btn btn-danger">delete</a>
+				</td>	        
+		      </tr>
+		    {% endfor %}
+	    </tbody>
+	</table>
+{% endblock %}
