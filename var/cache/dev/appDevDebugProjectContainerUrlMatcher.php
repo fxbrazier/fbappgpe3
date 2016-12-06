@@ -137,6 +137,24 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
         }
 
+        // picture_list
+        if ($pathinfo === '/dashboard') {
+            return array (  '_controller' => 'AppBundle\\Controller\\PictureController::listAction',  '_route' => 'picture_list',);
+        }
+
+        if (0 === strpos($pathinfo, '/picture/de')) {
+            // picture_details
+            if (0 === strpos($pathinfo, '/picture/details') && preg_match('#^/picture/details/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'picture_details')), array (  '_controller' => 'AppBundle\\Controller\\PictureController::detailsAction',));
+            }
+
+            // picture_delete
+            if (0 === strpos($pathinfo, '/picture/delete') && preg_match('#^/picture/delete/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'picture_delete')), array (  '_controller' => 'AppBundle\\Controller\\PictureController::deleteAction',));
+            }
+
+        }
+
         throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
     }
 }
