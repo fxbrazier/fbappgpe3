@@ -4,4 +4,8 @@ $(function(){
         itemSelector: ".thumbnail"
     });
 
+   /* $('a').onhover(''){
+    	$('this').find('hover-box').
+    }*/
+
 });
