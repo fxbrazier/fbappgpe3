@@ -19,8 +19,8 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_b337b36f7890bd396f5377fc4fe653d046d95368d7e2f891b9ee00af32a874c7 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_b337b36f7890bd396f5377fc4fe653d046d95368d7e2f891b9ee00af32a874c7->enter($__internal_b337b36f7890bd396f5377fc4fe653d046d95368d7e2f891b9ee00af32a874c7_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "base_front.html.twig"));
+        $__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40->enter($__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "base_front.html.twig"));
 
         // line 1
         echo "<!DOCTYPE html>
@@ -64,78 +64,90 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
             /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
         }
         </style>
+       
+        
     </head>
     <body>
+
     <div class=\"row\">
     
-      <div class=\"col-md-2\"> img salon</div>
-      
-      <div class=\"col-md-8\">
-        <div class=\"container-fluid\">
-          
-            <!-- navbar -->
-            <div class=\"container-fluid\">
-              <nav class=\"navbar navbar-default\">
-                <div class=\"container\">
-                  <!-- Brand and toggle get grouped for better mobile display -->
-                  <div class=\"navbar-header\">
-                    <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar-collapse-1\">
-                      <span class=\"sr-only\">Toggle navigation</span>
-                      <span class=\"icon-bar\"></span>
-                      <span class=\"icon-bar\"></span>
-                      <span class=\"icon-bar\"></span>
-                    </button>
-                    <a class=\"navbar-brand\" href=\"#\">Brand</a>
-                  </div>
-              
-                  <!-- Collect the nav links, forms, and other content for toggling -->
-                  <div class=\"collapse navbar-collapse\" id=\"navbar-collapse-1\">
-                    <ul class=\"nav navbar-nav navbar-right\">
-                      <li><a href=\"#\">Home</a></li>
-                      <li><a href=\"#\">About</a></li>
-                      <li><a href=\"#\">Services</a></li>
-                      <li><a href=\"#\">Works</a></li>
-                      <li><a href=\"#\">News</a></li>
-                      <li><a href=\"#\">Contact</a></li>
-                      <li>
-                        <a class=\"btn btn-default btn-outline btn-circle\"  data-toggle=\"collapse\" href=\"#nav-collapse1\" aria-expanded=\"false\" aria-controls=\"nav-collapse1\">Categories</a>
-                      </li>
-                    </ul>
-                    <ul class=\"collapse nav navbar-nav nav-collapse\" id=\"nav-collapse1\">
-                      <li><a href=\"#\">Web design</a></li>
-                      <li><a href=\"#\">Development</a></li>
-                      <li><a href=\"#\">Graphic design</a></li>
-                      <li><a href=\"#\">Print</a></li>
-                      <li><a href=\"#\">Motion</a></li>
-                      <li><a href=\"#\">Mobile apps</a></li>
-                    </ul>
-                  </div><!-- /.navbar-collapse -->
-                </div><!-- /.container -->
-              </nav><!-- /.navbar -->
-            </div>
-          
+      <div class=\"col-md-2 col-xs-12\">
+        <img src=\"/fbappgpe3/web/images/pardon_maman.jpg\" alt=\"Pardon Maman\" class=\"img_logo\">
       </div>
+
       
-      <div class=\"col-md-2\"></div>
+      <div class=\"col-md-8 col-xs-12 entete\">
+        <div class=\"row\">
+          
+        </div>
+        <div class=\"row container mx-auto title-page\">
+          <h2 class='text-center'>Concours photo Pardon Maman</h2>
+        </div>
+        <div class=\"row\">
+          <div class=\"container text-center\">
+            
+              <!-- navbar -->
+              <hr class=\"hr-warning \" />
+                <ol class=\"breadcrumb bread-warning\">
+                  <li><a href=\"#\" class='menu-link'>HOME</a></li>
+                  <li><a href=\"#\" class=\"menu-link\">RULES</a></li>
+                  <li><a href=\"#\" class=\"menu-link\">FINISHED CONTESTS</a></li>
+                  <button href=\"#\" class=\"btn btn-contest\">ENTER <i class=\"glyphicon glyphicon-camera\"></i></button>
+                </ol>
+          </div>
+        </div>
+        
+      </div>
+      <div class=\"col-md-2 col-xs-12\"></div>
     </div>  
         
     <div class=\"row\">
       <div class=\"col-md-4\"></div>
-      <div class=\"col-md-2\">
+      <div class=\"col-md-2 col-xs-6\">
           <!-- Filters -->
-          
-
-
+              <div class=\"\">
+                <button class=\"btn btn-default dropdown-toggle custom-dropdown-filter\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">
+                  Filter
+                  <span class=\"caret\"></span>
+                </button>
+                <ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">
+                  <li><a href=\"#\" class=\"filter_like\">Likes</a></li>
+                  <li><a href=\"#\" class=\"filter_date\">Date</a></li>
+                  <li role=\"separator\" class=\"divider\"></li>
+                  <li><a href=\"#\" class=\"filter_like\">My phtoto</a></li>
+                </ul>
+              </div>
       </div>
 
-      <div class=\"col-md-2\">
+      <div class=\"col-md-2 col-xs-6\">
         <!-- Search tags -->
-        
+        <div id=\"custom-search-input\">
+              <div class=\"input-group\">
+                  <input type=\"text\" class=\"form-control search-input input-md\" placeholder=\"Add tags\" />
+                  <span class=\"input-group-btn\">
+                      <button class=\"btn btn-info btn-lg btn-search\" type=\"button\">
+                          <i class=\"glyphicon glyphicon-search\"></i>
+                      </button>
+                  </span>
+              </div>
+        </div>
 
 
       </div> 
       
       <div class=\"col-md-4\"></div>                          
+    </div>
+
+    <div class=\"row\">
+      <div class=\"col-md-2\">
+        
+      </div>
+      <div class=\"col-md-8 col-xs-12 results container\">
+        <span class=\"hashtag\">#photo</span>
+      </div>
+      <div class=\"col-md-2\">
+        
+      </div>
     </div>
 
         <!-- Page Content -->
@@ -144,14 +156,14 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
             <div class=\"row\">
                 <div class=\"col-lg-12\">
                   ";
-        // line 103
+        // line 115
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["app"]) ? $context["app"] : $this->getContext($context, "app")), "session", array()), "flashBag", array()), "get", array(0 => "notice"), "method"));
         foreach ($context['_seq'] as $context["_key"] => $context["flash_message"]) {
-            // line 104
+            // line 116
             echo "                    <div class=\"flash-notice alert alert-success\">
                       ";
-            // line 105
+            // line 117
             echo twig_escape_filter($this->env, $context["flash_message"], "html", null, true);
             echo "
                     </div>
@@ -160,10 +172,10 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['flash_message'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 108
+        // line 120
         echo "                  ";
         $this->displayBlock('body', $context, $blocks);
-        // line 109
+        // line 121
         echo "                </div>
             </div>
             <!-- /.row -->
@@ -177,61 +189,62 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         <!-- /.container -->
 
         ";
-        // line 121
+        // line 133
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 122
+        // line 134
         echo "        <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js\"></script>
         <script type=\"text/javascript\" src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>
+        <script src=\"/fbappgpe3/web/js/script_front.js\" type=\"text/javascript\" charset=\"utf-8\" async defer></script>
     </body>
 </html>
 ";
         
-        $__internal_b337b36f7890bd396f5377fc4fe653d046d95368d7e2f891b9ee00af32a874c7->leave($__internal_b337b36f7890bd396f5377fc4fe653d046d95368d7e2f891b9ee00af32a874c7_prof);
+        $__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40->leave($__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40_prof);
 
     }
 
     // line 5
     public function block_title($context, array $blocks = array())
     {
-        $__internal_cb273c0c8f2baa5bb1d93653825dcfb41c43bfdf3543fd73c3590731d985362c = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_cb273c0c8f2baa5bb1d93653825dcfb41c43bfdf3543fd73c3590731d985362c->enter($__internal_cb273c0c8f2baa5bb1d93653825dcfb41c43bfdf3543fd73c3590731d985362c_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a->enter($__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         echo "fbapp";
         
-        $__internal_cb273c0c8f2baa5bb1d93653825dcfb41c43bfdf3543fd73c3590731d985362c->leave($__internal_cb273c0c8f2baa5bb1d93653825dcfb41c43bfdf3543fd73c3590731d985362c_prof);
+        $__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a->leave($__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a_prof);
 
     }
 
     // line 14
     public function block_stylesheets($context, array $blocks = array())
     {
-        $__internal_44de2d98edf47f6dfd03de554c5c93120f998a392ff9595c5d00c87c5259ba7c = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_44de2d98edf47f6dfd03de554c5c93120f998a392ff9595c5d00c87c5259ba7c->enter($__internal_44de2d98edf47f6dfd03de554c5c93120f998a392ff9595c5d00c87c5259ba7c_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17->enter($__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         
-        $__internal_44de2d98edf47f6dfd03de554c5c93120f998a392ff9595c5d00c87c5259ba7c->leave($__internal_44de2d98edf47f6dfd03de554c5c93120f998a392ff9595c5d00c87c5259ba7c_prof);
+        $__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17->leave($__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17_prof);
 
     }
 
-    // line 108
+    // line 120
     public function block_body($context, array $blocks = array())
     {
-        $__internal_ec18cdaaba1c88deaa8ec0cb2d0e9462dd72cab8b5c608936a1f25b5bd3abffa = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_ec18cdaaba1c88deaa8ec0cb2d0e9462dd72cab8b5c608936a1f25b5bd3abffa->enter($__internal_ec18cdaaba1c88deaa8ec0cb2d0e9462dd72cab8b5c608936a1f25b5bd3abffa_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b->enter($__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         
-        $__internal_ec18cdaaba1c88deaa8ec0cb2d0e9462dd72cab8b5c608936a1f25b5bd3abffa->leave($__internal_ec18cdaaba1c88deaa8ec0cb2d0e9462dd72cab8b5c608936a1f25b5bd3abffa_prof);
+        $__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b->leave($__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b_prof);
 
     }
 
-    // line 121
+    // line 133
     public function block_javascripts($context, array $blocks = array())
     {
-        $__internal_5e8eb93695f810daed3f11cfa625056dddc4da451c56ad6bac8019e6e79aa9ef = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_5e8eb93695f810daed3f11cfa625056dddc4da451c56ad6bac8019e6e79aa9ef->enter($__internal_5e8eb93695f810daed3f11cfa625056dddc4da451c56ad6bac8019e6e79aa9ef_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d->enter($__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         
-        $__internal_5e8eb93695f810daed3f11cfa625056dddc4da451c56ad6bac8019e6e79aa9ef->leave($__internal_5e8eb93695f810daed3f11cfa625056dddc4da451c56ad6bac8019e6e79aa9ef_prof);
+        $__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d->leave($__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d_prof);
 
     }
 
@@ -247,7 +260,7 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
 
     public function getDebugInfo()
     {
-        return array (  228 => 121,  217 => 108,  206 => 14,  194 => 5,  183 => 122,  181 => 121,  167 => 109,  164 => 108,  155 => 105,  152 => 104,  148 => 103,  58 => 16,  55 => 15,  53 => 14,  49 => 13,  45 => 12,  36 => 6,  32 => 5,  26 => 1,);
+        return array (  241 => 133,  230 => 120,  219 => 14,  207 => 5,  195 => 134,  193 => 133,  179 => 121,  176 => 120,  167 => 117,  164 => 116,  160 => 115,  58 => 16,  55 => 15,  53 => 14,  49 => 13,  45 => 12,  36 => 6,  32 => 5,  26 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -283,78 +296,90 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
             /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
         }
         </style>
+       
+        
     </head>
     <body>
+
     <div class=\"row\">
     
-      <div class=\"col-md-2\"> img salon</div>
-      
-      <div class=\"col-md-8\">
-        <div class=\"container-fluid\">
-          
-            <!-- navbar -->
-            <div class=\"container-fluid\">
-              <nav class=\"navbar navbar-default\">
-                <div class=\"container\">
-                  <!-- Brand and toggle get grouped for better mobile display -->
-                  <div class=\"navbar-header\">
-                    <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar-collapse-1\">
-                      <span class=\"sr-only\">Toggle navigation</span>
-                      <span class=\"icon-bar\"></span>
-                      <span class=\"icon-bar\"></span>
-                      <span class=\"icon-bar\"></span>
-                    </button>
-                    <a class=\"navbar-brand\" href=\"#\">Brand</a>
-                  </div>
-              
-                  <!-- Collect the nav links, forms, and other content for toggling -->
-                  <div class=\"collapse navbar-collapse\" id=\"navbar-collapse-1\">
-                    <ul class=\"nav navbar-nav navbar-right\">
-                      <li><a href=\"#\">Home</a></li>
-                      <li><a href=\"#\">About</a></li>
-                      <li><a href=\"#\">Services</a></li>
-                      <li><a href=\"#\">Works</a></li>
-                      <li><a href=\"#\">News</a></li>
-                      <li><a href=\"#\">Contact</a></li>
-                      <li>
-                        <a class=\"btn btn-default btn-outline btn-circle\"  data-toggle=\"collapse\" href=\"#nav-collapse1\" aria-expanded=\"false\" aria-controls=\"nav-collapse1\">Categories</a>
-                      </li>
-                    </ul>
-                    <ul class=\"collapse nav navbar-nav nav-collapse\" id=\"nav-collapse1\">
-                      <li><a href=\"#\">Web design</a></li>
-                      <li><a href=\"#\">Development</a></li>
-                      <li><a href=\"#\">Graphic design</a></li>
-                      <li><a href=\"#\">Print</a></li>
-                      <li><a href=\"#\">Motion</a></li>
-                      <li><a href=\"#\">Mobile apps</a></li>
-                    </ul>
-                  </div><!-- /.navbar-collapse -->
-                </div><!-- /.container -->
-              </nav><!-- /.navbar -->
-            </div>
-          
+      <div class=\"col-md-2 col-xs-12\">
+        <img src=\"/fbappgpe3/web/images/pardon_maman.jpg\" alt=\"Pardon Maman\" class=\"img_logo\">
       </div>
+
       
-      <div class=\"col-md-2\"></div>
+      <div class=\"col-md-8 col-xs-12 entete\">
+        <div class=\"row\">
+          
+        </div>
+        <div class=\"row container mx-auto title-page\">
+          <h2 class='text-center'>Concours photo Pardon Maman</h2>
+        </div>
+        <div class=\"row\">
+          <div class=\"container text-center\">
+            
+              <!-- navbar -->
+              <hr class=\"hr-warning \" />
+                <ol class=\"breadcrumb bread-warning\">
+                  <li><a href=\"#\" class='menu-link'>HOME</a></li>
+                  <li><a href=\"#\" class=\"menu-link\">RULES</a></li>
+                  <li><a href=\"#\" class=\"menu-link\">FINISHED CONTESTS</a></li>
+                  <button href=\"#\" class=\"btn btn-contest\">ENTER <i class=\"glyphicon glyphicon-camera\"></i></button>
+                </ol>
+          </div>
+        </div>
+        
+      </div>
+      <div class=\"col-md-2 col-xs-12\"></div>
     </div>  
         
     <div class=\"row\">
       <div class=\"col-md-4\"></div>
-      <div class=\"col-md-2\">
+      <div class=\"col-md-2 col-xs-6\">
           <!-- Filters -->
-          
-
-
+              <div class=\"\">
+                <button class=\"btn btn-default dropdown-toggle custom-dropdown-filter\" type=\"button\" id=\"dropdownMenu1\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">
+                  Filter
+                  <span class=\"caret\"></span>
+                </button>
+                <ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">
+                  <li><a href=\"#\" class=\"filter_like\">Likes</a></li>
+                  <li><a href=\"#\" class=\"filter_date\">Date</a></li>
+                  <li role=\"separator\" class=\"divider\"></li>
+                  <li><a href=\"#\" class=\"filter_like\">My phtoto</a></li>
+                </ul>
+              </div>
       </div>
 
-      <div class=\"col-md-2\">
+      <div class=\"col-md-2 col-xs-6\">
         <!-- Search tags -->
-        
+        <div id=\"custom-search-input\">
+              <div class=\"input-group\">
+                  <input type=\"text\" class=\"form-control search-input input-md\" placeholder=\"Add tags\" />
+                  <span class=\"input-group-btn\">
+                      <button class=\"btn btn-info btn-lg btn-search\" type=\"button\">
+                          <i class=\"glyphicon glyphicon-search\"></i>
+                      </button>
+                  </span>
+              </div>
+        </div>
 
 
       </div> 
       
       <div class=\"col-md-4\"></div>                          
+    </div>
+
+    <div class=\"row\">
+      <div class=\"col-md-2\">
+        
+      </div>
+      <div class=\"col-md-8 col-xs-12 results container\">
+        <span class=\"hashtag\">#photo</span>
+      </div>
+      <div class=\"col-md-2\">
+        
+      </div>
     </div>
 
         <!-- Page Content -->
@@ -383,6 +408,7 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         {% block javascripts %}{% endblock %}
         <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js\"></script>
         <script type=\"text/javascript\" src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>
+        <script src=\"/fbappgpe3/web/js/script_front.js\" type=\"text/javascript\" charset=\"utf-8\" async defer></script>
     </body>
 </html>
 ", "base_front.html.twig", "/Applications/MAMP/htdocs/fbappgpe3/app/Resources/views/base_front.html.twig");
