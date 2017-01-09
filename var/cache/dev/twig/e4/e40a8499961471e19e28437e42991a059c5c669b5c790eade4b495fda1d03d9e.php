@@ -19,8 +19,8 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40->enter($__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "base_front.html.twig"));
+        $__internal_55af5a376e38be80437ce49f475a5cabdc71ee8d1dc4b80a9ea970e2d8ced4cf = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_55af5a376e38be80437ce49f475a5cabdc71ee8d1dc4b80a9ea970e2d8ced4cf->enter($__internal_55af5a376e38be80437ce49f475a5cabdc71ee8d1dc4b80a9ea970e2d8ced4cf_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "base_front.html.twig"));
 
         // line 1
         echo "<!DOCTYPE html>
@@ -69,22 +69,27 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
     </head>
     <body>
 
-    <div class=\"row\">
+    <div id=\"wrapper\" class=\"row row_header\">
     
-      <div class=\"col-md-2 col-xs-12\">
+      <div class=\"col-md-3 col-xs-12\">
         <img src=\"/fbappgpe3/web/images/pardon_maman.jpg\" alt=\"Pardon Maman\" class=\"img_logo\">
       </div>
 
       
-      <div class=\"col-md-8 col-xs-12 entete\">
+      <div class=\"col-md-6 col-xs-12 col_entete\">
         <div class=\"row\">
           
         </div>
-        <div class=\"row container mx-auto title-page\">
-          <h2 class='text-center'>Concours photo Pardon Maman</h2>
+        <div class=\"row container-fluid title-page\">
+        
+          <h2 class='text-center'>
+            <img src=\"/fbappgpe3/web/images/tatoo-machine.png\" alt=\"\">
+            CONCOURS PHOTO JANVIER 2016 PARDON MAMAN
+            <img src=\"/fbappgpe3/web/images/tatoo-machine.png\" alt=\"\">
+          </h2>
         </div>
         <div class=\"row\">
-          <div class=\"container text-center\">
+          <div class=\"container-fluid \">
             
               <!-- navbar -->
               <hr class=\"hr-warning \" />
@@ -98,10 +103,10 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         </div>
         
       </div>
-      <div class=\"col-md-2 col-xs-12\"></div>
+      <div class=\"col-md-3 col-xs-12\"></div>
     </div>  
         
-    <div class=\"row\">
+    <div class=\"row row_filter\">
       <div class=\"col-md-4\"></div>
       <div class=\"col-md-2 col-xs-6\">
           <!-- Filters -->
@@ -138,15 +143,9 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
       <div class=\"col-md-4\"></div>                          
     </div>
 
-    <div class=\"row\">
-      <div class=\"col-md-2\">
-        
-      </div>
-      <div class=\"col-md-8 col-xs-12 results container\">
+    <div class=\"row row-results\">
+      <div class=\"col-md-12 col-xs-12 col-results container\">
         <span class=\"hashtag\">#photo</span>
-      </div>
-      <div class=\"col-md-2\">
-        
       </div>
     </div>
 
@@ -156,14 +155,14 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
             <div class=\"row\">
                 <div class=\"col-lg-12\">
                   ";
-        // line 115
+        // line 114
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["app"]) ? $context["app"] : $this->getContext($context, "app")), "session", array()), "flashBag", array()), "get", array(0 => "notice"), "method"));
         foreach ($context['_seq'] as $context["_key"] => $context["flash_message"]) {
-            // line 116
+            // line 115
             echo "                    <div class=\"flash-notice alert alert-success\">
                       ";
-            // line 117
+            // line 116
             echo twig_escape_filter($this->env, $context["flash_message"], "html", null, true);
             echo "
                     </div>
@@ -172,10 +171,10 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['flash_message'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 120
+        // line 119
         echo "                  ";
         $this->displayBlock('body', $context, $blocks);
-        // line 121
+        // line 120
         echo "                </div>
             </div>
             <!-- /.row -->
@@ -189,9 +188,9 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         <!-- /.container -->
 
         ";
-        // line 133
+        // line 132
         $this->displayBlock('javascripts', $context, $blocks);
-        // line 134
+        // line 133
         echo "        <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js\"></script>
         <script type=\"text/javascript\" src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\"></script>
         <script src=\"/fbappgpe3/web/js/script_front.js\" type=\"text/javascript\" charset=\"utf-8\" async defer></script>
@@ -199,52 +198,52 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
 </html>
 ";
         
-        $__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40->leave($__internal_6d2903182ee53d1cb5171ddf4ada28af606762e6a852ad280788074d7b5bac40_prof);
+        $__internal_55af5a376e38be80437ce49f475a5cabdc71ee8d1dc4b80a9ea970e2d8ced4cf->leave($__internal_55af5a376e38be80437ce49f475a5cabdc71ee8d1dc4b80a9ea970e2d8ced4cf_prof);
 
     }
 
     // line 5
     public function block_title($context, array $blocks = array())
     {
-        $__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a->enter($__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_eb3eae6076d59286bf22306f93fa50d12698b37b353479761ef3eafa93f6fa1d = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_eb3eae6076d59286bf22306f93fa50d12698b37b353479761ef3eafa93f6fa1d->enter($__internal_eb3eae6076d59286bf22306f93fa50d12698b37b353479761ef3eafa93f6fa1d_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         echo "fbapp";
         
-        $__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a->leave($__internal_a08b0e4f6f5352fff896b8379979e1d9d9eb6d5884ae84113a523e58cba7210a_prof);
+        $__internal_eb3eae6076d59286bf22306f93fa50d12698b37b353479761ef3eafa93f6fa1d->leave($__internal_eb3eae6076d59286bf22306f93fa50d12698b37b353479761ef3eafa93f6fa1d_prof);
 
     }
 
     // line 14
     public function block_stylesheets($context, array $blocks = array())
     {
-        $__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17->enter($__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_bdeb1652cc1ac3ad5f8290895b9c800f51e48891b4fcdce56b3daa1daf5051f2 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_bdeb1652cc1ac3ad5f8290895b9c800f51e48891b4fcdce56b3daa1daf5051f2->enter($__internal_bdeb1652cc1ac3ad5f8290895b9c800f51e48891b4fcdce56b3daa1daf5051f2_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         
-        $__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17->leave($__internal_67ce352bfca806ad74af9626ee049fce270d99e5ef748d0d0a527b17175b4f17_prof);
+        $__internal_bdeb1652cc1ac3ad5f8290895b9c800f51e48891b4fcdce56b3daa1daf5051f2->leave($__internal_bdeb1652cc1ac3ad5f8290895b9c800f51e48891b4fcdce56b3daa1daf5051f2_prof);
 
     }
 
-    // line 120
+    // line 119
     public function block_body($context, array $blocks = array())
     {
-        $__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b->enter($__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_2b38f1cbb5eae99a58bd9978abb2d574c94c1f78185d725a7f89c1ae5a6a5eea = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_2b38f1cbb5eae99a58bd9978abb2d574c94c1f78185d725a7f89c1ae5a6a5eea->enter($__internal_2b38f1cbb5eae99a58bd9978abb2d574c94c1f78185d725a7f89c1ae5a6a5eea_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         
-        $__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b->leave($__internal_b15f86b5fa33affc6072ec35415a11522359694d0fd35ace0bfd3439f630d75b_prof);
+        $__internal_2b38f1cbb5eae99a58bd9978abb2d574c94c1f78185d725a7f89c1ae5a6a5eea->leave($__internal_2b38f1cbb5eae99a58bd9978abb2d574c94c1f78185d725a7f89c1ae5a6a5eea_prof);
 
     }
 
-    // line 133
+    // line 132
     public function block_javascripts($context, array $blocks = array())
     {
-        $__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d->enter($__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
+        $__internal_22ed93cda2addf66a788ae2813fb1fc5b5f6db7b1a6fefabb80f54e04166fb8c = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_22ed93cda2addf66a788ae2813fb1fc5b5f6db7b1a6fefabb80f54e04166fb8c->enter($__internal_22ed93cda2addf66a788ae2813fb1fc5b5f6db7b1a6fefabb80f54e04166fb8c_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "base_front.html.twig"));
 
         
-        $__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d->leave($__internal_1277d8268c57eec656c7783f91d6ef05d040509c724d74823a8d0ea10c86d31d_prof);
+        $__internal_22ed93cda2addf66a788ae2813fb1fc5b5f6db7b1a6fefabb80f54e04166fb8c->leave($__internal_22ed93cda2addf66a788ae2813fb1fc5b5f6db7b1a6fefabb80f54e04166fb8c_prof);
 
     }
 
@@ -260,7 +259,7 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
 
     public function getDebugInfo()
     {
-        return array (  241 => 133,  230 => 120,  219 => 14,  207 => 5,  195 => 134,  193 => 133,  179 => 121,  176 => 120,  167 => 117,  164 => 116,  160 => 115,  58 => 16,  55 => 15,  53 => 14,  49 => 13,  45 => 12,  36 => 6,  32 => 5,  26 => 1,);
+        return array (  240 => 132,  229 => 119,  218 => 14,  206 => 5,  194 => 133,  192 => 132,  178 => 120,  175 => 119,  166 => 116,  163 => 115,  159 => 114,  58 => 16,  55 => 15,  53 => 14,  49 => 13,  45 => 12,  36 => 6,  32 => 5,  26 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -301,22 +300,27 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
     </head>
     <body>
 
-    <div class=\"row\">
+    <div id=\"wrapper\" class=\"row row_header\">
     
-      <div class=\"col-md-2 col-xs-12\">
+      <div class=\"col-md-3 col-xs-12\">
         <img src=\"/fbappgpe3/web/images/pardon_maman.jpg\" alt=\"Pardon Maman\" class=\"img_logo\">
       </div>
 
       
-      <div class=\"col-md-8 col-xs-12 entete\">
+      <div class=\"col-md-6 col-xs-12 col_entete\">
         <div class=\"row\">
           
         </div>
-        <div class=\"row container mx-auto title-page\">
-          <h2 class='text-center'>Concours photo Pardon Maman</h2>
+        <div class=\"row container-fluid title-page\">
+        
+          <h2 class='text-center'>
+            <img src=\"/fbappgpe3/web/images/tatoo-machine.png\" alt=\"\">
+            CONCOURS PHOTO JANVIER 2016 PARDON MAMAN
+            <img src=\"/fbappgpe3/web/images/tatoo-machine.png\" alt=\"\">
+          </h2>
         </div>
         <div class=\"row\">
-          <div class=\"container text-center\">
+          <div class=\"container-fluid \">
             
               <!-- navbar -->
               <hr class=\"hr-warning \" />
@@ -330,10 +334,10 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
         </div>
         
       </div>
-      <div class=\"col-md-2 col-xs-12\"></div>
+      <div class=\"col-md-3 col-xs-12\"></div>
     </div>  
         
-    <div class=\"row\">
+    <div class=\"row row_filter\">
       <div class=\"col-md-4\"></div>
       <div class=\"col-md-2 col-xs-6\">
           <!-- Filters -->
@@ -370,15 +374,9 @@ class __TwigTemplate_2e615bd184174826b5a87c7b204b83834a40c9acc003781c8fa1e11e062
       <div class=\"col-md-4\"></div>                          
     </div>
 
-    <div class=\"row\">
-      <div class=\"col-md-2\">
-        
-      </div>
-      <div class=\"col-md-8 col-xs-12 results container\">
+    <div class=\"row row-results\">
+      <div class=\"col-md-12 col-xs-12 col-results container\">
         <span class=\"hashtag\">#photo</span>
-      </div>
-      <div class=\"col-md-2\">
-        
       </div>
     </div>
 
