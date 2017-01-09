@@ -23,54 +23,74 @@ class OptionsController extends Controller
      * @Route("/options", name="option_edit")
      */
     public function updateAction(Request $request){
-        $options = $this->getDoctrine()
+        $_options = $this->getDoctrine()
                       ->getRepository('AppBundle:Options')
                       ->findAll();
-        var_dump($options);
+        $options = [];
+        foreach ($_options as $option) {
+          $options[$option->getOptionName()] = $option->getOptionContent();
+        }
+        //var_dump($options);
         // Options form
         $form = $this->createFormBuilder($options)
-        ->add('cgu', TextareaType::class, array(
-          'attr' => array(
+        ->add('first_color_theme', TextType::class, [
+          'attr' => [
+            //'id' => 'color-picker',
+            'style' => 'margin-bottom:15px'
+          ]])
+        ->add('second_color_theme', TextType::class, [
+          'attr' => [
+            //'id' => 'color-picker-2',
+            'style' => 'margin-bottom:15px',
+          ]])
+        ->add('cgu', TextareaType::class, [
+          'attr' => [
+            'class' => 'form-control',
+            'style' => 'margin-bottom:15px',
+            //'value'=> $options['cgu'];
+          ]])
+        ->add('rules', TextareaType::class, [
+          'attr' => [
             'class' => 'form-control',
             'style' => 'margin-bottom:15px'
-          )))
-        ->add('rules', TextareaType::class, array(
-          'attr' => array(
-            'class' => 'form-control',
-            'style' => 'margin-bottom:15px'
-          )))
-        ->add('update options', SubmitType::class, array(
-            'attr' => array(
-                'class' =>'btn-primary btn-lg',
-                'style' => 'margin-bottom:15px'
-            )))
+          ]])
+        ->add('update options', SubmitType::class, [
+          'attr' => [
+              'class' =>'btn-primary btn-lg',
+              'style' => 'margin-bottom:15px'
+          ]])
         ->getForm();
         $form->handleRequest($request);
 
         //handle request add option form
         if($form->isSubmitted() && $form->isValid()){
+              //var_dump($form);
+              /*$cgu = $form['cgu']->getData();
+              $rules = $form['rules']->getData();
+              $first_color_theme = $form['first_color_theme']->getData();
+              $second_color_theme = $form['second_color_theme']->getData();*/
+              
+              $_options = [
+                'cgu' => $form['cgu']->getData(),
+                'rules' => $form['rules']->getData(),
+                'first_color_theme' => $form['first_color_theme']->getData(),
+                'second_color_theme' => $form['second_color_theme']->getData()
+              ];
+              //var_dump($_options['cgu']);
+              //die();
+              foreach ($_options as $name => $content) {
+                $options->setOptionName($name);
+                $options->setOptionContent($content);
+                $em = $this->getDoctrine()->getManager();
+                $options = $em->getRepository('AppBundle:Options')->findOneBy( ['option_name' => $name ] );
+                //var_dump($options);
+                // tells Doctrine you want to (eventually) save the option (no queries yet)
+                $em->persist($options);
 
-              $cgu = $form['cgu']->getData();
-              die($cgu);
-              if($status == 'published'){
-                $status = 1;
-              }else{
-                $status = 0;
+                // actually executes the queries (i.e. the INSERT query)
+                $em->flush();
               }
 
-              $options->setName($name);
-              $options->setDescription($description);
-              $options->setStartDate($startDate);
-              $options->setStartDate($endDate);
-              $options->setPrize($prize);
-              $options->setStatus($status);
-              $em = $this->getDoctrine()->getManager();
-              $options = $em->getRepository('AppBundle:Options')->find($id);
-              // tells Doctrine you want to (eventually) save the option (no queries yet)
-              $em->persist($options);
-
-              // actually executes the queries (i.e. the INSERT query)
-              $em->flush();
               $this->addFlash(
                 'notice',
                 'Options Updated'
