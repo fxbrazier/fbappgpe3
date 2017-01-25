@@ -56,8 +56,8 @@ $(document).ready(function(){
 		$('.title-page').html('<h2 class="text-center">'+objet_concours[last_concours]+'</h2>');
 	}
 
-	//POPUP
-	
+	//GALERY
+	$('.gallery-img').Am2_SimpleSlider();
 
 
 });
