@@ -42,6 +42,8 @@ $(document).ready(function(){
 		var objet_photo = [];
 	}
 
+	$('.popup').click(function(){ $('.popup').addClass('hidden');});
+
 	// HEADER 
 	//  creation event au click du btn enter 
 	$('.btn-contest').click(function(){
@@ -54,6 +56,7 @@ $(document).ready(function(){
 		$('.title-page').html('<h2 class="text-center">'+objet_concours[last_concours]+'</h2>');
 	}
 
+	//POPUP
 	
 
 
