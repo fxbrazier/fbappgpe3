@@ -42,6 +42,8 @@ $(document).ready(function(){
 		var objet_photo = [];
 	}
 
+	$('.popup').click(function(){ $('.popup').addClass('hidden');});
+
 	// HEADER 
 	//  creation event au click du btn enter 
 	$('.btn-contest').click(function(){
