@@ -76,15 +76,15 @@ class OptionsController extends Controller
                 'first_color_theme' => $form['first_color_theme']->getData(),
                 'second_color_theme' => $form['second_color_theme']->getData()
               ];
-              //var_dump($_options['cgu']);
-              //die();
+              var_dump($_options['cgu']);
               foreach ($_options as $name => $content) {
                 $options->setOptionName($name);
                 $options->setOptionContent($content);
                 $em = $this->getDoctrine()->getManager();
                 $options = $em->getRepository('AppBundle:Options')->findOneBy( ['option_name' => $name ] );
-                //var_dump($options);
+                var_dump($options);
                 // tells Doctrine you want to (eventually) save the option (no queries yet)
+              die();
                 $em->persist($options);
 
                 // actually executes the queries (i.e. the INSERT query)

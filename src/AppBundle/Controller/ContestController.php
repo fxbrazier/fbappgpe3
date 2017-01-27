@@ -22,6 +22,7 @@ class ContestController extends Controller
      * @Route("/contest", name="contest_list")
      */
     public function listAction(){
+      //phpinfo();
         $contests = $this->getDoctrine()
                       ->getRepository('AppBundle:Contest')
                       ->findAll();
