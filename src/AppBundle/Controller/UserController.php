@@ -7,6 +7,7 @@ use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
 /* include Form extension */
@@ -20,9 +21,9 @@ class UserController extends Controller
 {
 
     /**
-    * #@Method({"GET"})
+    * @Method({"GET"})
     * @Route("/login", name="login")
-    * #@Template()
+    * @Template()
     */
     public function loginAction(Request $request)
     {
@@ -42,5 +43,23 @@ class UserController extends Controller
         );
 
         return $params;
+    }
+
+    /**
+    * @Method({"POST"})
+    * @Route("/login_check", name="login_check")
+    */
+    public function check()
+    {
+        throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
+    }
+
+    /**
+    * @Method({"GET"})
+    * @Route("/logout", name="logout")
+    */
+    public function logout()
+    {
+        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
     }
 }
