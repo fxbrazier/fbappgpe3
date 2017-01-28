@@ -144,7 +144,6 @@ class UserPasswordEncoderCommandTest extends WebTestCase
         $kernel->boot();
 
         $application = new Application($kernel);
-        $application->setTerminalDimensions(119 + strlen(PHP_EOL), 80);
 
         $application->add(new UserPasswordEncoderCommand());
         $passwordEncoderCommand = $application->find('security:encode-password');

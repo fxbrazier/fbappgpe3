@@ -18,7 +18,7 @@ class ExpressionLanguageTest extends \PHPUnit_Framework_TestCase
 {
     public function testCachedParse()
     {
-        $cacheMock = $this->getMockBuilder('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface')->getMock();
+        $cacheMock = $this->getMock('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface');
         $savedParsedExpression = null;
         $expressionLanguage = new ExpressionLanguage($cacheMock);
 
@@ -116,7 +116,7 @@ class ExpressionLanguageTest extends \PHPUnit_Framework_TestCase
 
     public function testCachingWithDifferentNamesOrder()
     {
-        $cacheMock = $this->getMockBuilder('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface')->getMock();
+        $cacheMock = $this->getMock('Symfony\Component\ExpressionLanguage\ParserCache\ParserCacheInterface');
         $expressionLanguage = new ExpressionLanguage($cacheMock);
         $savedParsedExpressions = array();
         $cacheMock

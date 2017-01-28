@@ -67,9 +67,7 @@ class TemplateManager
      *
      * @param Profile $profile
      *
-     * @return Twig_Template[]
-     *
-     * @deprecated not used anymore internally
+     * @return array
      */
     public function getTemplates(Profile $profile)
     {
@@ -91,7 +89,7 @@ class TemplateManager
      *
      * @throws \UnexpectedValueException
      */
-    public function getNames(Profile $profile)
+    protected function getNames(Profile $profile)
     {
         $templates = array();
 

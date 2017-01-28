@@ -1139,7 +1139,7 @@ class FilesystemTest extends FilesystemTestCase
         $scheme = 'file://';
         $filename = $scheme.$this->workspace.DIRECTORY_SEPARATOR.'foo'.DIRECTORY_SEPARATOR.'baz.txt';
 
-        $this->filesystem->dumpFile($filename, 'bar');
+        $this->filesystem->dumpFile($filename, 'bar', null);
 
         $this->assertFileExists($filename);
         $this->assertSame('bar', file_get_contents($filename));
@@ -1150,7 +1150,7 @@ class FilesystemTest extends FilesystemTestCase
         $scheme = 'compress.zlib://';
         $filename = $this->workspace.DIRECTORY_SEPARATOR.'foo'.DIRECTORY_SEPARATOR.'baz.txt';
 
-        $this->filesystem->dumpFile($filename, 'bar');
+        $this->filesystem->dumpFile($filename, 'bar', null);
 
         // Zlib stat uses file:// wrapper so remove scheme
         $this->assertFileExists(str_replace($scheme, '', $filename));

@@ -67,7 +67,7 @@ class ORMQueryBuilderLoaderTest extends \PHPUnit_Framework_TestCase
 
         $query->expects($this->once())
             ->method('setParameter')
-            ->with('ORMQueryBuilderLoader_getEntitiesByIds_id', array(1, 2, 3, '9223372036854775808'), Connection::PARAM_INT_ARRAY)
+            ->with('ORMQueryBuilderLoader_getEntitiesByIds_id', array(1, 2, 3), Connection::PARAM_INT_ARRAY)
             ->willReturn($query);
 
         $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
@@ -83,7 +83,7 @@ class ORMQueryBuilderLoaderTest extends \PHPUnit_Framework_TestCase
             ->from('Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity', 'e');
 
         $loader = new ORMQueryBuilderLoader($qb);
-        $loader->getEntitiesByIds('id', array(1, '', 2, 3, 'foo', '9223372036854775808'));
+        $loader->getEntitiesByIds('id', array(1, '', 2, 3, 'foo'));
     }
 
     public function testEmbeddedIdentifierName()

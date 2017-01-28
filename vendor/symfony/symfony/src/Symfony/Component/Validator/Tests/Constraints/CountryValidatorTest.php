@@ -91,7 +91,7 @@ class CountryValidatorTest extends AbstractConstraintValidatorTest
     public function testValidateUsingCountrySpecificLocale()
     {
         // in order to test with "en_GB"
-        IntlTestHelper::requireFullIntl($this, false);
+        IntlTestHelper::requireFullIntl($this);
 
         \Locale::setDefault('en_GB');
 

@@ -16,7 +16,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
-use Symfony\Bridge\Doctrine\Test\TestRepositoryFactory;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\AssociationEntity;
@@ -49,16 +48,9 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
      */
     protected $repository;
 
-    protected $repositoryFactory;
-
     protected function setUp()
     {
-        $this->repositoryFactory = new TestRepositoryFactory();
-
-        $config = DoctrineTestHelper::createTestConfiguration();
-        $config->setRepositoryFactory($this->repositoryFactory);
-
-        $this->em = DoctrineTestHelper::createTestEntityManager($config);
+        $this->em = DoctrineTestHelper::createTestEntityManager();
         $this->registry = $this->createRegistryMock($this->em);
         $this->createSchema($this->em);
 
@@ -67,7 +59,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
     protected function createRegistryMock(ObjectManager $em = null)
     {
-        $registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')->getMock();
+        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
         $registry->expects($this->any())
                  ->method('getManager')
                  ->with($this->equalTo(self::EM_NAME))
@@ -96,7 +88,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
              ->will($this->returnValue($repositoryMock))
         ;
 
-        $classMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')->getMock();
+        $classMetadata = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadata');
         $classMetadata
             ->expects($this->any())
             ->method('hasField')
@@ -172,7 +164,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
         $this->buildViolation('myMessage')
             ->atPath('property.path.name')
-            ->setParameter('{{ value }}', '"Foo"')
+            ->setParameter('{{ value }}', 'Foo')
             ->setInvalidValue('Foo')
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
             ->assertRaised();
@@ -197,7 +189,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
         $this->buildViolation('myMessage')
             ->atPath('property.path.bar')
-            ->setParameter('{{ value }}', '"Foo"')
+            ->setParameter('{{ value }}', 'Foo')
             ->setInvalidValue('Foo')
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
             ->assertRaised();
@@ -250,7 +242,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
         $this->buildViolation('myMessage')
             ->atPath('property.path.name')
-            ->setParameter('{{ value }}', '"Foo"')
+            ->setParameter('{{ value }}', 'Foo')
             ->setInvalidValue('Foo')
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
             ->assertRaised();
@@ -283,7 +275,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
         $this->buildViolation('myMessage')
             ->atPath('property.path.name2')
-            ->setParameter('{{ value }}', '"Bar"')
+            ->setParameter('{{ value }}', 'Bar')
             ->setInvalidValue('Bar')
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
             ->assertRaised();
@@ -454,7 +446,7 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
 
         $this->buildViolation('myMessage')
             ->atPath('property.path.single')
-            ->setParameter('{{ value }}', '"'.$expectedValue.'"')
+            ->setParameter('{{ value }}', $expectedValue)
             ->setInvalidValue($expectedValue)
             ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
             ->assertRaised();
@@ -478,44 +470,6 @@ class UniqueEntityValidatorTest extends AbstractConstraintValidatorTest
         $this->validator->validate($associated, $constraint);
 
         $this->assertNoViolation();
-    }
-
-    public function testValidateUniquenessWithArrayValue()
-    {
-        $repository = $this->createRepositoryMock();
-        $this->repositoryFactory->setRepository($this->em, 'Symfony\Bridge\Doctrine\Tests\Fixtures\SingleIntIdEntity', $repository);
-
-        $constraint = new UniqueEntity(array(
-            'message' => 'myMessage',
-            'fields' => array('phoneNumbers'),
-            'em' => self::EM_NAME,
-            'repositoryMethod' => 'findByCustom',
-        ));
-
-        $entity1 = new SingleIntIdEntity(1, 'foo');
-        $entity1->phoneNumbers[] = 123;
-
-        $repository->expects($this->once())
-            ->method('findByCustom')
-            ->will($this->returnValue(array($entity1)))
-        ;
-
-        $this->em->persist($entity1);
-        $this->em->flush();
-
-        $entity2 = new SingleIntIdEntity(2, 'bar');
-        $entity2->phoneNumbers[] = 123;
-        $this->em->persist($entity2);
-        $this->em->flush();
-
-        $this->validator->validate($entity2, $constraint);
-
-        $this->buildViolation('myMessage')
-            ->atPath('property.path.phoneNumbers')
-            ->setParameter('{{ value }}', 'array')
-            ->setInvalidValue(array(123))
-            ->setCode(UniqueEntity::NOT_UNIQUE_ERROR)
-            ->assertRaised();
     }
 
     /**

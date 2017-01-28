@@ -103,6 +103,7 @@ class MonologExtension extends Extension
                 'Monolog\\Handler\\TestHandler',
                 'Monolog\\Logger',
                 'Symfony\\Bridge\\Monolog\\Logger',
+                'Symfony\\Bridge\\Monolog\\Handler\\DebugHandler',
                 'Monolog\\Handler\\FingersCrossed\\ActivationStrategyInterface',
                 'Monolog\\Handler\\FingersCrossed\\ErrorLevelActivationStrategy',
             ));
@@ -134,17 +135,6 @@ class MonologExtension extends Extension
 
         if ($handler['include_stacktraces']) {
             $definition->setConfigurator(array('Symfony\\Bundle\\MonologBundle\\MonologBundle', 'includeStacktraces'));
-        }
-
-        if ($handler['process_psr_3_messages']) {
-            $processorId = 'monolog.processor.psr_log_message';
-            if (!$container->hasDefinition($processorId)) {
-                $processor = new Definition('Monolog\\Processor\\PsrLogMessageProcessor');
-                $processor->setPublic(false);
-                $container->setDefinition($processorId, $processor);
-            }
-
-            $definition->addMethodCall('pushProcessor', array(new Reference($processorId)));
         }
 
         switch ($handler['type']) {
@@ -192,13 +182,13 @@ class MonologExtension extends Extension
                     $handler['publisher']['port'],
                     $handler['publisher']['chunk_size'],
                 ));
-                $transportId = uniqid('monolog.gelf.transport.', true);
+                $transportId = uniqid('monolog.gelf.transport.');
                 $transport->setPublic(false);
                 $container->setDefinition($transportId, $transport);
 
                 $publisher = new Definition('%monolog.gelfphp.publisher.class%', array());
                 $publisher->addMethodCall('addTransport', array(new Reference($transportId)));
-                $publisherId = uniqid('monolog.gelf.publisher.', true);
+                $publisherId = uniqid('monolog.gelf.publisher.');
                 $publisher->setPublic(false);
                 $container->setDefinition($publisherId, $publisher);
             } elseif (class_exists('Gelf\MessagePublisher')) {
@@ -208,7 +198,7 @@ class MonologExtension extends Extension
                     $handler['publisher']['chunk_size'],
                 ));
 
-                $publisherId = uniqid('monolog.gelf.publisher.', true);
+                $publisherId = uniqid('monolog.gelf.publisher.');
                 $publisher->setPublic(false);
                 $container->setDefinition($publisherId, $publisher);
             } else {
@@ -238,7 +228,7 @@ class MonologExtension extends Extension
                     $server,
                 ));
 
-                $clientId = uniqid('monolog.mongo.client.', true);
+                $clientId = uniqid('monolog.mongo.client.');
                 $client->setPublic(false);
                 $container->setDefinition($clientId, $client);
             }
@@ -279,7 +269,7 @@ class MonologExtension extends Extension
                     $elasticaClientArguments
                 ));
 
-                $clientId = uniqid('monolog.elastica.client.', true);
+                $clientId = uniqid('monolog.elastica.client.');
                 $elasticaClient->setPublic(false);
                 $container->setDefinition($clientId, $elasticaClient);
             }

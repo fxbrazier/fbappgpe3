@@ -24,8 +24,11 @@ class ConfigCachePassTest extends \PHPUnit_Framework_TestCase
             'checker_3' => array(),
         );
 
-        $definition = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')->getMock();
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')->setMethods(array('findTaggedServiceIds', 'getDefinition', 'hasDefinition'))->getMock();
+        $definition = $this->getMock('Symfony\Component\DependencyInjection\Definition');
+        $container = $this->getMock(
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            array('findTaggedServiceIds', 'getDefinition', 'hasDefinition')
+        );
 
         $container->expects($this->atLeastOnce())
             ->method('findTaggedServiceIds')
@@ -49,8 +52,11 @@ class ConfigCachePassTest extends \PHPUnit_Framework_TestCase
 
     public function testThatCheckersCanBeMissing()
     {
-        $definition = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')->getMock();
-        $container = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')->setMethods(array('findTaggedServiceIds'))->getMock();
+        $definition = $this->getMock('Symfony\Component\DependencyInjection\Definition');
+        $container = $this->getMock(
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            array('findTaggedServiceIds')
+        );
 
         $container->expects($this->atLeastOnce())
             ->method('findTaggedServiceIds')

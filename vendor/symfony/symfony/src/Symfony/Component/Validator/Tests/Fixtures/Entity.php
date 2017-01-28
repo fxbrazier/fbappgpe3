@@ -33,14 +33,6 @@ class Entity extends EntityParent implements EntityInterfaceB
      * @Assert\Choice(choices={"A", "B"}, message="Must be one of %choices%")
      */
     public $firstName;
-    /**
-     * @Assert\Valid
-     */
-    public $childA;
-    /**
-     * @Assert\Valid
-     */
-    public $childB;
     protected $lastName;
     public $reference;
     public $reference2;
@@ -104,37 +96,5 @@ class Entity extends EntityParent implements EntityInterfaceB
      */
     public static function validateMeStatic($object, ExecutionContextInterface $context)
     {
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChildA()
-    {
-        return $this->childA;
-    }
-
-    /**
-     * @param mixed $childA
-     */
-    public function setChildA($childA)
-    {
-        $this->childA = $childA;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChildB()
-    {
-        return $this->childB;
-    }
-
-    /**
-     * @param mixed $childB
-     */
-    public function setChildB($childB)
-    {
-        $this->childB = $childB;
     }
 }

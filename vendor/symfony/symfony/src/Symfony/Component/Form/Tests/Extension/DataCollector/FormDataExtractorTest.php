@@ -60,13 +60,13 @@ class FormDataExtractorTest extends \PHPUnit_Framework_TestCase
     {
         $this->valueExporter = new FormDataExtractorTest_SimpleValueExporter();
         $this->dataExtractor = new FormDataExtractor($this->valueExporter);
-        $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
-        $this->factory = $this->getMockBuilder('Symfony\Component\Form\FormFactoryInterface')->getMock();
+        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->factory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
     }
 
     public function testExtractConfiguration()
     {
-        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
         $type->expects($this->any())
             ->method('getInnerType')
             ->will($this->returnValue(new \stdClass()));
@@ -87,7 +87,7 @@ class FormDataExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractConfigurationSortsPassedOptions()
     {
-        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
         $type->expects($this->any())
             ->method('getInnerType')
             ->will($this->returnValue(new \stdClass()));
@@ -121,7 +121,7 @@ class FormDataExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractConfigurationSortsResolvedOptions()
     {
-        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
         $type->expects($this->any())
             ->method('getInnerType')
             ->will($this->returnValue(new \stdClass()));
@@ -152,18 +152,18 @@ class FormDataExtractorTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractConfigurationBuildsIdRecursively()
     {
-        $type = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormTypeInterface')->getMock();
+        $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
         $type->expects($this->any())
             ->method('getInnerType')
             ->will($this->returnValue(new \stdClass()));
 
         $grandParent = $this->createBuilder('grandParent')
             ->setCompound(true)
-            ->setDataMapper($this->getMockBuilder('Symfony\Component\Form\DataMapperInterface')->getMock())
+            ->setDataMapper($this->getMock('Symfony\Component\Form\DataMapperInterface'))
             ->getForm();
         $parent = $this->createBuilder('parent')
             ->setCompound(true)
-            ->setDataMapper($this->getMockBuilder('Symfony\Component\Form\DataMapperInterface')->getMock())
+            ->setDataMapper($this->getMock('Symfony\Component\Form\DataMapperInterface'))
             ->getForm();
         $form = $this->createBuilder('name')
             ->setType($type)

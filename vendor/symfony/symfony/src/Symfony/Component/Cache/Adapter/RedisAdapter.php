@@ -25,7 +25,7 @@ class RedisAdapter extends AbstractAdapter
     private static $defaultConnectionOptions = array(
         'class' => null,
         'persistent' => 0,
-        'timeout' => 30,
+        'timeout' => 0,
         'read_timeout' => 0,
         'retry_interval' => 0,
     );

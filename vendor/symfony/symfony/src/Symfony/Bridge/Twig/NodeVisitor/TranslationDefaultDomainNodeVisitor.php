@@ -49,7 +49,7 @@ class TranslationDefaultDomainNodeVisitor extends \Twig_BaseNodeVisitor
 
                 return $node;
             } else {
-                $var = $this->getVarName();
+                $var = $env->getParser()->getVarName();
                 $name = new \Twig_Node_Expression_AssignName($var, $node->getTemplateLine());
                 $this->scope->set('domain', new \Twig_Node_Expression_Name($var, $node->getTemplateLine()));
 
@@ -122,10 +122,5 @@ class TranslationDefaultDomainNodeVisitor extends \Twig_BaseNodeVisitor
         }
 
         return false;
-    }
-
-    private function getVarName()
-    {
-        return sprintf('__internal_%s', hash('sha256', uniqid(mt_rand(), true), false));
     }
 }

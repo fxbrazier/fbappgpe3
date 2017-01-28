@@ -19,7 +19,7 @@ class DumpNodeTest extends \PHPUnit_Framework_TestCase
     {
         $node = new DumpNode('bar', null, 7);
 
-        $env = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock());
+        $env = new \Twig_Environment($this->getMock('Twig_LoaderInterface'));
         $compiler = new \Twig_Compiler($env);
 
         $expected = <<<'EOTXT'
@@ -43,7 +43,7 @@ EOTXT;
     {
         $node = new DumpNode('bar', null, 7);
 
-        $env = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock());
+        $env = new \Twig_Environment($this->getMock('Twig_LoaderInterface'));
         $compiler = new \Twig_Compiler($env);
 
         $expected = <<<'EOTXT'
@@ -70,7 +70,7 @@ EOTXT;
         ));
         $node = new DumpNode('bar', $vars, 7);
 
-        $env = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock());
+        $env = new \Twig_Environment($this->getMock('Twig_LoaderInterface'));
         $compiler = new \Twig_Compiler($env);
 
         $expected = <<<'EOTXT'
@@ -80,12 +80,7 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-
-        if (PHP_VERSION_ID >= 70000) {
-            $expected = preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
-        } else {
-            $expected = preg_replace('/%(.*?)%/', '(isset($context["$1"]) ? $context["$1"] : null)', $expected);
-        }
+        $expected = preg_replace('/%(.*?)%/', '(isset($context["$1"]) ? $context["$1"] : null)', $expected);
 
         $this->assertSame($expected, $compiler->compile($node)->getSource());
     }
@@ -98,7 +93,7 @@ EOTXT;
         ));
         $node = new DumpNode('bar', $vars, 7);
 
-        $env = new \Twig_Environment($this->getMockBuilder('Twig_LoaderInterface')->getMock());
+        $env = new \Twig_Environment($this->getMock('Twig_LoaderInterface'));
         $compiler = new \Twig_Compiler($env);
 
         $expected = <<<'EOTXT'
@@ -111,12 +106,7 @@ if ($this->env->isDebug()) {
 }
 
 EOTXT;
-
-        if (PHP_VERSION_ID >= 70000) {
-            $expected = preg_replace('/%(.*?)%/', '($context["$1"] ?? null)', $expected);
-        } else {
-            $expected = preg_replace('/%(.*?)%/', '(isset($context["$1"]) ? $context["$1"] : null)', $expected);
-        }
+        $expected = preg_replace('/%(.*?)%/', '(isset($context["$1"]) ? $context["$1"] : null)', $expected);
 
         $this->assertSame($expected, $compiler->compile($node)->getSource());
     }
