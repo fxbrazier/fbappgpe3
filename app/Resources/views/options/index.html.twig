@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h2>Options</h2>
+	<!-- <a href="contest/create" class="btn btn-default">Add Contest</a> -->
+	{{form_start(form)}}
+	{{form_widget(form)}}
+	{{form_end(form)}}
+{% endblock %}
