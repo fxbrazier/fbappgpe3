@@ -7,8 +7,6 @@ use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 
 /* include Form extension */
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,9 +19,7 @@ class UserController extends Controller
 {
 
     /**
-    * @Method({"GET"})
     * @Route("/login", name="login")
-    * @Template()
     */
     public function loginAction(Request $request)
     {
@@ -46,7 +42,6 @@ class UserController extends Controller
     }
 
     /**
-    * @Method({"POST"})
     * @Route("/login_check", name="login_check")
     */
     public function check()
@@ -55,7 +50,6 @@ class UserController extends Controller
     }
 
     /**
-    * @Method({"GET"})
     * @Route("/logout", name="logout")
     */
     public function logout()
