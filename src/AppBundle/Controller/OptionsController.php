@@ -20,7 +20,7 @@ class OptionsController extends Controller
 {
 
     /**
-     * @Route("/options", name="option_edit")
+     * @Route("/myadmin/options", name="option_edit")
      */
     public function updateAction(Request $request){
         $_options = $this->getDoctrine()

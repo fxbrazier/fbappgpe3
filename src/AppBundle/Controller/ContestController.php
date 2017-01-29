@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class ContestController extends Controller
 {
     /**
-     * @Route("/contest", name="contest_list")
+     * @Route("/myadmin/contest", name="contest_list")
      */
     public function listAction(){
       //phpinfo();
@@ -33,7 +33,7 @@ class ContestController extends Controller
     }
 
     /**
-     * @Route("/contest/create", name="contest_create")
+     * @Route("/myadmin/contest/create", name="contest_create")
      */
     public function createAction(Request $request){
     	$contest = new Contest;
@@ -98,6 +98,22 @@ class ContestController extends Controller
             $prize = $form['prize']->getData();
             $status = $form['status']->getData();
 
+            // Gets the last contest
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Contest');
+            // query for multiple products matching the given name, ordered by price
+            $lastContest = $repository->findBy(
+                array('endDate' => 'ASC')
+            );
+            dump($lastContest);
+            die();
+            if( $lastContest ){ 
+            }
+
+
+
+
+
+
             if($status == 'published'){
               $status = 1;
             }else{
@@ -129,7 +145,7 @@ class ContestController extends Controller
     }
 
     /**
-     * @Route("/contest/details/{id}", name="contest_details")
+     * @Route("/myadmin/contest/details/{id}", name="contest_details")
      */
     public function detailsAction($id, Request $request){
         $contest = $this->getDoctrine()
@@ -144,7 +160,7 @@ class ContestController extends Controller
 
 
     /**
-     * @Route("/contest/edit/{id}", name="contest_edit")
+     * @Route("/myadmin/contest/edit/{id}", name="contest_edit")
      */
     public function editAction($id, Request $request){
         $contest = $this->getDoctrine()
@@ -245,7 +261,7 @@ class ContestController extends Controller
     }
 
     /**
-     * @Route("/contest/delete/{id}", name="contest_delete")
+     * @Route("/myadmin/contest/delete/{id}", name="contest_delete")
      */
     public function deleteAction($id){
         $em = $this->getDoctrine()

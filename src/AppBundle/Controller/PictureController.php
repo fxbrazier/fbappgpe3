@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 class PictureController extends Controller
 {
     /**
-     * @Route("/dashboard", name="picture_list")
+     * @Route("/myadmin", name="picture_list")
      */
     public function listAction(){
         $pictures = $this->getDoctrine()
@@ -33,7 +33,7 @@ class PictureController extends Controller
 
 
     /**
-     * @Route("/picture/details/{id}", name="picture_details")
+     * @Route("/myadmin/picture/details/{id}", name="picture_details")
      */
     public function detailsAction($id, Request $request){
         $picture = $this->getDoctrine()
@@ -47,7 +47,7 @@ class PictureController extends Controller
     }
 
     /**
-     * @Route("/picture/delete/{id}", name="picture_delete")
+     * @Route("/myadmin/picture/delete/{id}", name="picture_delete")
      */
     public function deleteAction($id){
         $em = $this->getDoctrine()
