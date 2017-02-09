@@ -27,8 +27,8 @@ class UserController extends Controller
     public function loginAction(Request $request)
     {
         //session_start();
-        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
-            'app_secret' => '07c750201b982bbb3af84ab97d556099',
+        $fb = new Facebook\Facebook(['app_id' => '', // Replace {app-id} with your app id
+            'app_secret' => '',
             'default_graph_version' => 'v2.5']);
         // var_dump($fb);
         $helper = $fb->getRedirectLoginHelper();
