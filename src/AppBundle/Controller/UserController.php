@@ -27,15 +27,16 @@ class UserController extends Controller
     */
     public function loginAction(Request $request)
     {
-        //session_start();
         $fb = new Facebook\Facebook(['app_id' => '', // Replace {app-id} with your app id
             'app_secret' => '',
             'default_graph_version' => 'v2.5']);
-        // var_dump($fb);
         $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['email']; // Optional permissions
+        $permissions = ['email', 'user_likes', 'user_photos']; // Optional permissions
         $loginUrl = $helper->getLoginUrl('http://localhost/fbappgpe3/web/app_dev.php/loginCallback', $permissions);
-        //return $this->redirectToRoute('login_callback');
+
+        return $this->render('user/login.html.twig', array(
+            'url' => $loginUrl
+            ));
     }
 
     /**
@@ -43,8 +44,6 @@ class UserController extends Controller
      */
     public function loginCallbackAction($redirectUrl)
     {
-        $session = new Session();
-        $session->start();
 
         $fb = new Facebook\Facebook([
           'app_id' => '',
@@ -52,7 +51,8 @@ class UserController extends Controller
           'default_graph_version' => 'v2.5',
         ]); 
 
-        $helper = $fb->getRedirectLoginHelper();    
+        $helper = $fb->getRedirectLoginHelper();  
+        //var_dump($helper);  
 
         try {
           $accessToken = $helper->getAccessToken();
@@ -63,14 +63,17 @@ class UserController extends Controller
         } catch(Facebook\Exceptions\FacebookSDKException $e) {
           // When validation fails or other local issues
           echo 'Facebook SDK returned an error: ' . $e->getMessage();
+          var_dump($helper->getError());
           exit;
         }   
 
         if(isset($accessToken)){
-            $session->set('access_token', (string) $accessToken);
+            $_SESSION["ACCESS_TOKEN"] = (string) $accessToken;
         }else{
-            $session->remove('access_token');
+            unset($_SESSION["ACCESS_TOKEN"]);
         }
+
+        return $this->redirectToRoute('homepage');
     }
 
     /**
