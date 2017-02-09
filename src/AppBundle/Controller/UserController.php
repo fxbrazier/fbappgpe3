@@ -27,6 +27,10 @@ class UserController extends Controller
     */
     public function loginAction(Request $request)
     {
+        if (!session_id()) {
+            session_start();
+        }
+
         $fb = new Facebook\Facebook(['app_id' => '', // Replace {app-id} with your app id
             'app_secret' => '',
             'default_graph_version' => 'v2.5']);
@@ -44,6 +48,9 @@ class UserController extends Controller
      */
     public function loginCallbackAction($redirectUrl)
     {
+        if (!session_id()) {
+            session_start();
+        }
 
         $fb = new Facebook\Facebook([
           'app_id' => '',
@@ -52,7 +59,6 @@ class UserController extends Controller
         ]); 
 
         $helper = $fb->getRedirectLoginHelper();  
-        //var_dump($helper);  
 
         try {
           $accessToken = $helper->getAccessToken();
@@ -77,56 +83,6 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/connect", name="connect")
-     */
-    public function connectAction($redirectUrl)
-    {
-        $session = new Session();
-        $session->start();
-
-        $fb = new Facebook\Facebook(['app_id' => '', // Replace {app-id} with your app id
-            'app_secret' => '',
-            'default_graph_version' => 'v2.5']);
-        //$fb->setDefaultApplication($this->appId, $this->appSecret);
-        $helper = $fb->getRedirectLoginHelper($redirectUrl);
-        $_SESSION['FBRLH_state']=$_GET['state'];
-        //si la var session existe et que l'on un un fb token en session
-        if (isset($_SESSION) && isset($_SESSION['FBRLH_state'])) {
-            //on récupère la session active
-            $this->session = "tot";
-        } else {
-            //on récupère le token de connexion
-            $this->session = $helper->getSessionFromRedirect();
-        }
-        //si on a une session
-        if ($this->session) {
-            try {
-                //génération du token
-                $accessToken = $helper->getAccessToken();
-                //si on a bien notre token de connexion on peut commencer à faire des requetes avec la classe facebookrequest
-                $request = new FacebookRequest($this->session, 'GET', '/me');
-                //on recupère un objet graph user
-                $response = $request->execute()->getGraphObject('Facebook\GraphUser');
-                //var_dump($response);
-                //facebook id
-                $facebookId = $response->getId();
-                //image profil du user
-                $imgProfile = '<img src="//graph.facebook.com/' . $facebookId . '/picture">';
-                //si le user a refuser la permission de recupération du mail
-                if ($response->getEmail() === null) {
-                    throw new Exception('l\'email n\'est pas disponible');
-                }
-                return $response;
-            } catch (Exception $e) {
-                unset($_SESSION['FBRLH_state']);
-                return $helper->getReRequestUrl(['email']);
-            }
-        } else {
-            return $helper->getReRequestUrl(['email']);
-        }
-    }
-
-    /**
     * @Route("/login_check", name="login_check")
     */
     public function check()
@@ -139,6 +95,7 @@ class UserController extends Controller
     */
     public function logout()
     {
-        throw new \RuntimeException('You must activate the logout in your security firewall configuration.');
+       unset($_SESSION["ACCESS_TOKEN"]);
+       return $this->redirectToRoute('homepage');
     }
 }
