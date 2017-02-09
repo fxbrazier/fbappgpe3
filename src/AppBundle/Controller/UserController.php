@@ -15,6 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+use Facebook;
+use Facebook\FacebookRequest;
+
 class UserController extends Controller
 {
 
@@ -23,7 +26,18 @@ class UserController extends Controller
     */
     public function loginAction(Request $request)
     {
-        $request = $this->getRequest();
+        //session_start();
+        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
+            'app_secret' => '07c750201b982bbb3af84ab97d556099',
+            'default_graph_version' => 'v2.5']);
+        // var_dump($fb);
+        $helper = $fb->getRedirectLoginHelper();
+        $permissions = ['email', 'user_photos']; // Optional permissions
+        $loginUrl = $helper->getLoginUrl('http://localhost/fbapp/fbappgpe3/web/app_dev.php/connect', $permissions);
+        return $this->redirect($loginUrl);
+        //$this->connect($loginUrl);
+
+        /*$request = $this->getRequest();
         $session = $request->getSession();
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
@@ -38,7 +52,7 @@ class UserController extends Controller
             "error"         => $error,
         );
 
-        return $params;
+        return $params;*/
     }
 
     /**
