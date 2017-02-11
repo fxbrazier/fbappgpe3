@@ -35,7 +35,7 @@ class UserController extends Controller
             'app_secret' => '07c750201b982bbb3af84ab97d556099',
             'default_graph_version' => 'v2.5']);
         $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['email', 'user_likes', 'user_photos']; // Optional permissions
+        $permissions = ['email', 'user_photos']; // Optional permissions
         $loginUrl = $helper->getLoginUrl('http://localhost/fbappgpe3/web/app_dev.php/loginCallback', $permissions);
 
         return $this->render('user/login.html.twig', array(
@@ -81,6 +81,100 @@ class UserController extends Controller
         }
 
         return $this->redirectToRoute('homepage');
+    }
+
+    /**
+     * @Route("/getInfosFb", name="get_infos_fb")
+     */
+    public function getInfosFbAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $fb = new Facebook\Facebook([
+          'app_id' => '1780532462163734',
+          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'default_graph_version' => 'v2.5',
+        ]); 
+
+        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+                try {
+
+                  $response = $fb->get('/me?fields=id,first_name,last_name,email');
+                  $user = $response->getGraphUser();
+                  //$name = $response->getName();
+                  //var_dump($name);die;
+                  var_dump($user);die;
+
+                  /*foreach ($albums["albums"]["data"] as $album) {
+                    echo "<h1>".$album["name"]."</h1>";
+                    if (isset($album["photos"])) {
+                      foreach ($album["photos"]["data"] as $photo) {
+                        echo "<img width='100px' src='".$photo["source"]."'>";
+                      }
+                    }
+                  }*/
+
+                } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                  // When Graph returns an error
+                  echo 'Graph returned an error: ' . $e->getMessage();
+                  exit;
+                } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                  // When validation fails or other local issues
+                  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                  exit;
+                }
+
+                return $albums;
+    }
+
+    /**
+     * @Route("/getAlbumsFb", name="get_albums_fb")
+     */
+    public function getAlbumsFbAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $fb = new Facebook\Facebook([
+          'app_id' => '1780532462163734',
+          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'default_graph_version' => 'v2.5',
+        ]); 
+
+        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+                try {
+
+                  $response = $fb->get('/me?fields=albums{name,photos{name,source}}');
+                  $albums = $response->getDecodedBody();
+                  //$name = $response->getName();
+                  //var_dump($name);die;
+                  var_dump($albums);die;
+
+                  /*foreach ($albums["albums"]["data"] as $album) {
+                    echo "<h1>".$album["name"]."</h1>";
+                    if (isset($album["photos"])) {
+                      foreach ($album["photos"]["data"] as $photo) {
+                        echo "<img width='100px' src='".$photo["source"]."'>";
+                      }
+                    }
+                  }*/
+
+                } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                  // When Graph returns an error
+                  echo 'Graph returned an error: ' . $e->getMessage();
+                  exit;
+                } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                  // When validation fails or other local issues
+                  echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                  exit;
+                }
+
+                return $albums;
     }
 
     /**

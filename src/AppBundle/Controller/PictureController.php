@@ -99,8 +99,6 @@ class PictureController extends Controller
 
         $form->handleRequest($request);
 
-        $msg = '';
-
         //handle request add contest form
         if($form->isSubmitted() && $form->isValid()){
 
