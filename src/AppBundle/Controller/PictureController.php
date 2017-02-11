@@ -16,6 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 class PictureController extends Controller
 {
     /**
@@ -60,6 +63,83 @@ class PictureController extends Controller
           'Picture removed'
         );
         return $this->redirectToRoute('picture_list');
+    }
+
+    /**
+     * @Route("/participate/{id}", name="picture_participate")
+     */
+    public function participateAction($id, Request $request){
+      //$this->forward('app.user_controller:checkIfLogAction');
+      //$response = $this->forward('AppBundle:User:checkIfLog');
+      //var_dump($_SESSION);
+
+        $picture = new Picture();
+        // Picture form
+        $form = $this->createFormBuilder($picture)
+        ->add('name', TextType::class, array(
+          'attr' => array(
+            'label' => 'Nom',
+            'class' => 'form-control',
+            'style' => 'margin-bottom:15px',
+            'required' => true
+          )))
+        ->add('link', FileType::class, array(
+          'attr' => array(
+            'label' => 'Image',
+            'class' => 'form-control',
+            'style' => 'margin-bottom:15px',
+            'required' => true
+          )))
+        ->add('valider', SubmitType::class, array(
+                  'attr' => array(
+                      'class' =>'btn-primary btn-lg',
+                      'style' => 'margin-bottom:15px'
+                  )))
+              ->getForm();
+
+        $form->handleRequest($request);
+
+        $msg = '';
+
+        //handle request add contest form
+        if($form->isSubmitted() && $form->isValid()){
+
+              $name = $form['name']->getData();
+              $link =  $form['link']->getData();
+
+              //dossier de destination
+              $dir = $this->get('kernel')->getRootDir() . '/../web/images/';
+
+              //génération d'un nom unique pour le fichier uploadé
+              $link_name = hash(sha512, session_id().microtime());
+              $extension = $link->guessExtension();
+
+              $link_name = $link_name.'.'.$extension;
+
+              $link->move($dir, $link->getClientOriginalName());
+
+              $picture->setName($name);
+              $picture->setLink($link);
+              $picture->setidContest($id);
+
+              $em = $this->getDoctrine()->getManager();
+              $picture = $em->getRepository('AppBundle:Picture')->find($id);
+              // tells Doctrine you want to (eventually) save the contest (no queries yet)
+              $em->persist($picture);
+
+              // actually executes the queries (i.e. the INSERT query)
+              $em->flush();
+
+              $msg = 'Votre participation est enregistrée';
+
+              return $this->redirectToRoute('default/index.html.twig');
+
+        }
+
+      return $this->render('contest/participate.html.twig', array(
+            'contest' => $picture,
+            'form' => $form->createView()
+            ));
     }
 
 }

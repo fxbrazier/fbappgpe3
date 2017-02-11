@@ -25,7 +25,7 @@ class UserController extends Controller
     /**
     * @Route("/login", name="login")
     */
-    public function loginAction(Request $request)
+    public function loginAction($msg)
     {
         if (!session_id()) {
             session_start();
@@ -39,14 +39,15 @@ class UserController extends Controller
         $loginUrl = $helper->getLoginUrl('http://localhost/fbappgpe3/web/app_dev.php/loginCallback', $permissions);
 
         return $this->render('user/login.html.twig', array(
-            'url' => $loginUrl
+            'url' => $loginUrl,
+            'msg' => $msg
             ));
     }
 
     /**
      * @Route("/loginCallback", name="login_callback")
      */
-    public function loginCallbackAction($redirectUrl)
+    public function loginCallbackAction()
     {
         if (!session_id()) {
             session_start();
@@ -85,17 +86,47 @@ class UserController extends Controller
     /**
     * @Route("/login_check", name="login_check")
     */
-    public function check()
+    public function checkIfLogAction()
     {
-        throw new \RuntimeException('You must configure the check path to be handled by the firewall using form_login in your security firewall configuration.');
+        if (!session_id()) {
+            session_start();
+        }
+        var_dump($_SESSION);
+
+        if (!isset($_SESSION["ACCESS_TOKEN"])) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+    * @Route("/login_admin_check", name="login_admin_check")
+    */
+    public function checkIfLogAdminAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        if (!isset($_SESSION["ACCESS_TOKEN"])) {
+            return $this->redirectToRoute('login', array('msg' => "Vous n'êtes pas autoriser à accéder à cette section"));
+        }
+
+        return true;
     }
 
     /**
     * @Route("/logout", name="logout")
     */
-    public function logout()
+    public function logoutAction()
     {
-       unset($_SESSION["ACCESS_TOKEN"]);
-       return $this->redirectToRoute('homepage');
+        if (!session_id()) {
+            session_start();
+        }
+
+        unset($_SESSION["ACCESS_TOKEN"]);
+        //var_dump($_SESSION);die;
+        return $this->redirectToRoute('homepage');
     }
 }

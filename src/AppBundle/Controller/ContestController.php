@@ -7,6 +7,7 @@ use AppBundle\Entity\Contest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 
 /* include Form extension */
@@ -275,6 +276,5 @@ class ContestController extends Controller
         );
         return $this->redirectToRoute('contest_list');
     }
-
 }
 

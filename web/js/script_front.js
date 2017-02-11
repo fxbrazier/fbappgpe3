@@ -47,8 +47,7 @@ $(document).ready(function(){
 	// HEADER 
 	//  creation event au click du btn enter 
 	$('.btn-contest').click(function(){
-		alert("fonction enterContest");
-		enterContest();
+		document.location.href="http://localhost/fbappgpe3/web/app_dev.php/participate";
 	});
 
 	// fonction qui ecrit le titre de la page en fonction du dernier concours

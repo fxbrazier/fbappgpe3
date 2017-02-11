@@ -42,6 +42,13 @@ class Picture
      */
     private $geolocalisation;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id_contest", type="integer")
+     */
+    private $id_contest;
+
 
     /**
      * Get id
@@ -124,5 +131,54 @@ class Picture
     {
         return $this->geolocalisation;
     }
+
+    /**
+     * Get id_contest
+     *
+     * @return int
+     */
+    public function getIdContest()
+    {
+        return $this->id_contest;
+    }
+
+    /**
+     * Set id_contest
+     *
+     * @param int $id_contest
+     *
+     * @return Picture
+     */
+    public function setidContest($id_contest)
+    {
+        $this->id_contest = $id_contest;
+
+        return $this;
+    }
+
+    /**
+     * Get id_user
+     *
+     * @return int
+     */
+    public function getIdUser()
+    {
+        return $this->id_user;
+    }
+
+    /**
+     * Set id_user
+     *
+     * @param int $id_user
+     *
+     * @return Picture
+     */
+    public function setidUser($id_user)
+    {
+        $this->id_user = $id_user;
+
+        return $this;
+    }
+
 }
 
