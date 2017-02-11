@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User implements Symfony\Component\Security\Core\User\UserInterface
+class User
 {
     /**
      * @var int
@@ -90,6 +90,13 @@ class User implements Symfony\Component\Security\Core\User\UserInterface
      * @ORM\Column(name="status", type="integer")
      */
     private $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="id_fb", type="string", length=150)
+     */
+    private $id_fb;
 
 
 
@@ -380,6 +387,31 @@ class User implements Symfony\Component\Security\Core\User\UserInterface
     public function setSalt($salt)
     {
         $this->salt = $salt;
+    
+        return $this;
+    }
+
+    /**
+     * Get id_fb
+     *
+     * @return string
+     */
+
+    public function getIdFb() {
+        return $this->id_fb;
+    }
+
+
+    /**
+     * Set id_fb
+     *
+     * @param string $id_fb
+     *
+     * @return User
+     */
+    public function setIdFb($id_fb)
+    {
+        $this->id_fb = $id_fb;
     
         return $this;
     }

@@ -69,74 +69,81 @@ class PictureController extends Controller
      * @Route("/participate/{id}", name="picture_participate")
      */
     public function participateAction($id, Request $request){
-      //$this->forward('app.user_controller:checkIfLogAction');
-      //$response = $this->forward('AppBundle:User:checkIfLog');
-      //var_dump($_SESSION);
+      if ($this->get('app.user_controller')->checkIfLogAction()) {
+        $user = $this->get('app.user_controller')->getInfosFbAction();
+        $name = $user["name"];  
 
-        $picture = new Picture();
-        // Picture form
-        $form = $this->createFormBuilder($picture)
-        ->add('name', TextType::class, array(
-          'attr' => array(
-            'label' => 'Nom',
-            'class' => 'form-control',
-            'style' => 'margin-bottom:15px',
-            'required' => true
-          )))
-        ->add('link', FileType::class, array(
-          'attr' => array(
-            'label' => 'Image',
-            'class' => 'form-control',
-            'style' => 'margin-bottom:15px',
-            'required' => true
-          )))
-        ->add('valider', SubmitType::class, array(
-                  'attr' => array(
-                      'class' =>'btn-primary btn-lg',
-                      'style' => 'margin-bottom:15px'
-                  )))
-              ->getForm();
+        //$test = $this->get('app.user_controller')->checkIfLogAction();
+        //var_dump($test);die;  
 
-        $form->handleRequest($request);
+        //var_dump($user);die;
+          $picture = new Picture();
+          // Picture form
+          $form = $this->createFormBuilder($picture)
+          ->add('name', TextType::class, array(
+            'attr' => array(
+              'label' => 'Nom',
+              'class' => 'form-control',
+              'style' => 'margin-bottom:15px',
+              'required' => true
+            )))
+          ->add('link', FileType::class, array(
+            'attr' => array(
+              'label' => 'Image',
+              'class' => 'form-control',
+              'style' => 'margin-bottom:15px',
+              'required' => true
+            )))
+          ->add('valider', SubmitType::class, array(
+                    'attr' => array(
+                        'class' =>'btn-primary btn-lg',
+                        'style' => 'margin-bottom:15px'
+                    )))
+                ->getForm();  
 
-        //handle request add contest form
-        if($form->isSubmitted() && $form->isValid()){
+          $form->handleRequest($request); 
 
-              $name = $form['name']->getData();
-              $link =  $form['link']->getData();
+          //handle request add contest form
+          if($form->isSubmitted() && $form->isValid()){ 
 
-              //dossier de destination
-              $dir = $this->get('kernel')->getRootDir() . '/../web/images/';
+                $name = $form['name']->getData();
+                $link =  $form['link']->getData();  
 
-              //génération d'un nom unique pour le fichier uploadé
-              $link_name = hash('sha512', session_id().microtime());
-              $extension = $link->guessExtension();
+                //dossier de destination
+                $dir = $this->get('kernel')->getRootDir() . '/../web/images/';  
 
-              $link_name = $link_name.'.'.$extension;
+                //génération d'un nom unique pour le fichier uploadé
+                $link_name = hash('sha512', session_id().microtime());
+                $extension = $link->guessExtension(); 
 
-              $link->move($dir, $link_name);
+                $link_name = $link_name.'.'.$extension; 
 
-              $picture->setName($name);
-              $picture->setLink($link);
-              $picture->setGeolocalisation('');
-              $picture->setidUser('1');
-              $picture->setidContest($id);
+                $link->move($dir, $link_name);  
 
-              $em = $this->getDoctrine()->getManager();
-              $em->persist($picture);
+                $picture->setName($name);
+                $picture->setLink($link);
+                $picture->setGeolocalisation('');
+                $picture->setidUser('1');
+                $picture->setidContest($id);  
 
-              // actually executes the queries (i.e. the INSERT query)
-              $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($picture); 
 
-              return $this->redirectToRoute('homepage');
+                // actually executes the queries (i.e. the INSERT query)
+                $em->flush(); 
 
-        }
+                return $this->redirectToRoute('homepage');  
 
-      return $this->render('contest/participate.html.twig', array(
-            'contest' => $picture,
-            'form' => $form->createView()
-            ));
+          } 
+
+        return $this->render('contest/participate.html.twig', array(
+              'contest' => $picture,
+              'form' => $form->createView(),
+              'name' => $name
+              ));
+      }else{
+        return $this->redirectToRoute('login');
+      }
     }
-
 }
 

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
 
 /* include Form extension */
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -39,8 +40,7 @@ class UserController extends Controller
         $loginUrl = $helper->getLoginUrl('http://localhost/fbappgpe3/web/app_dev.php/loginCallback', $permissions);
 
         return $this->render('user/login.html.twig', array(
-            'url' => $loginUrl,
-            'msg' => $msg
+            'url' => $loginUrl
             ));
     }
 
@@ -84,7 +84,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/getInfosFb", name="get_infos_fb")
+     * @Route("/getInfosFb", name="user_infos_fb")
      */
     public function getInfosFbAction()
     {
@@ -100,34 +100,57 @@ class UserController extends Controller
 
         $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
 
-                try {
+        try {
 
-                  $response = $fb->get('/me?fields=id,first_name,last_name,email');
-                  $user = $response->getGraphUser();
-                  //$name = $response->getName();
-                  //var_dump($name);die;
-                  var_dump($user);die;
+            $response = $fb->get('/me?fields=id,first_name,last_name,email,name');
+            $user = $response->getGraphUser();
 
-                  /*foreach ($albums["albums"]["data"] as $album) {
-                    echo "<h1>".$album["name"]."</h1>";
-                    if (isset($album["photos"])) {
-                      foreach ($album["photos"]["data"] as $photo) {
-                        echo "<img width='100px' src='".$photo["source"]."'>";
-                      }
-                    }
-                  }*/
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
 
-                } catch(Facebook\Exceptions\FacebookResponseException $e) {
-                  // When Graph returns an error
-                  echo 'Graph returned an error: ' . $e->getMessage();
-                  exit;
-                } catch(Facebook\Exceptions\FacebookSDKException $e) {
-                  // When validation fails or other local issues
-                  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                  exit;
-                }
+        return $user;
+    }
 
-                return $albums;
+     /**
+     * @Route("/createOrUpdate", name="user_create_or_update")
+     */
+    public function createOrUpdateAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $fb = new Facebook\Facebook([
+          'app_id' => '1780532462163734',
+          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'default_graph_version' => 'v2.5',
+        ]); 
+
+        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+        try {
+
+            $response = $fb->get('/me?fields=id,first_name,last_name,email,name');
+            $user = $response->getGraphUser();
+
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
+
+        return $user;
     }
 
     /**
@@ -185,12 +208,11 @@ class UserController extends Controller
         if (!session_id()) {
             session_start();
         }
-        var_dump($_SESSION);
 
-        if (!isset($_SESSION["ACCESS_TOKEN"])) {
-            return false;
-        }else{
+        if (isset($_SESSION["ACCESS_TOKEN"])) {
             return true;
+        }else{
+            return false;
         }
     }
 
@@ -203,11 +225,11 @@ class UserController extends Controller
             session_start();
         }
 
-        if (!isset($_SESSION["ACCESS_TOKEN"])) {
-            return $this->redirectToRoute('login', array('msg' => "Vous n'êtes pas autoriser à accéder à cette section"));
+        if ($this->checkIfLogAction()) {
+            
+        }else{
+            return false;
         }
-
-        return true;
     }
 
     /**
