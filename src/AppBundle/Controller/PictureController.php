@@ -111,28 +111,26 @@ class PictureController extends Controller
               $dir = $this->get('kernel')->getRootDir() . '/../web/images/';
 
               //génération d'un nom unique pour le fichier uploadé
-              $link_name = hash(sha512, session_id().microtime());
+              $link_name = hash('sha512', session_id().microtime());
               $extension = $link->guessExtension();
 
               $link_name = $link_name.'.'.$extension;
 
-              $link->move($dir, $link->getClientOriginalName());
+              $link->move($dir, $link_name);
 
               $picture->setName($name);
               $picture->setLink($link);
+              $picture->setGeolocalisation('');
+              $picture->setidUser('1');
               $picture->setidContest($id);
 
               $em = $this->getDoctrine()->getManager();
-              $picture = $em->getRepository('AppBundle:Picture')->find($id);
-              // tells Doctrine you want to (eventually) save the contest (no queries yet)
               $em->persist($picture);
 
               // actually executes the queries (i.e. the INSERT query)
               $em->flush();
 
-              $msg = 'Votre participation est enregistrée';
-
-              return $this->redirectToRoute('default/index.html.twig');
+              return $this->redirectToRoute('homepage');
 
         }
 
