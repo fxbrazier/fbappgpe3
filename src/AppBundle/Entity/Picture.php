@@ -49,6 +49,13 @@ class Picture
      */
     private $id_contest;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hebergement", type="string", length=50)
+     */
+    private $hebergement;
+
 
     /**
      * Get id
@@ -178,6 +185,30 @@ class Picture
         $this->id_user = $id_user;
 
         return $this;
+    }
+
+    /**
+     * Set hebergement
+     *
+     * @param string $hebergement
+     *
+     * @return Picture
+     */
+    public function setHebergement($hebergement)
+    {
+        $this->hebergement = $hebergement;
+
+        return $this;
+    }
+
+    /**
+     * Get hebergement
+     *
+     * @return string
+     */
+    public function getHebergement()
+    {
+        return $this->hebergement;
     }
 
 }

@@ -98,21 +98,6 @@ class User
      */
     private $id_fb;
 
-
-
-    private $salt;
-
-
-
-    public function __construct() {
-        // De base, on va attribuer au nouveau utilisateur, le rôle « ROLE_USER »
-        $this->roles = array("ROLE_USER");
-        // Chaque utilisateur va se voir attribuer une clé permettant 
-        // de saler son mot de passe. Cela n'est pas obligatoire,
-        // on pourrait mettre $salt à null
-        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
-    }
-
     /**
      * Get id
      *
@@ -414,14 +399,6 @@ class User
         $this->id_fb = $id_fb;
     
         return $this;
-    }
-
-
-
-
-    public function eraseCredentials() {
-        // Ici nous n'avons rien à effacer. 
-        // Cela aurait été le cas si nous avions un mot de passe en clair.
     }
 }
 

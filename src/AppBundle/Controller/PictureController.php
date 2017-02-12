@@ -71,12 +71,10 @@ class PictureController extends Controller
     public function participateAction($id, Request $request){
       if ($this->get('app.user_controller')->checkIfLogAction()) {
         $user = $this->get('app.user_controller')->getInfosFbAction();
-        $name = $user["name"];  
+        $name = $user["name"];
 
-        //$test = $this->get('app.user_controller')->checkIfLogAction();
-        //var_dump($test);die;  
+        $albums = $this->get('app.user_controller')->getAlbumsFbAction();
 
-        //var_dump($user);die;
           $picture = new Picture();
           // Picture form
           $form = $this->createFormBuilder($picture)
@@ -90,6 +88,16 @@ class PictureController extends Controller
           ->add('link', FileType::class, array(
             'attr' => array(
               'label' => 'Image',
+              'class' => 'form-control',
+              'style' => 'margin-bottom:15px',
+              'required' => true
+            )))
+          ->add('hebergement', ChoiceType::class, array(
+            'choices'  => array(
+                'Importer une image' => 'local',
+                'Sélectionner une image facebook' => 'facebook'
+            ),
+            'attr' => array(
               'class' => 'form-control',
               'style' => 'margin-bottom:15px',
               'required' => true
@@ -139,7 +147,8 @@ class PictureController extends Controller
         return $this->render('contest/participate.html.twig', array(
               'contest' => $picture,
               'form' => $form->createView(),
-              'name' => $name
+              'name' => $name,
+              'albums' => $albums
               ));
       }else{
         return $this->redirectToRoute('login');

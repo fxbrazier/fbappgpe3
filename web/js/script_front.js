@@ -58,5 +58,16 @@ $(document).ready(function(){
 	//GALERY
 	$('.gallery-img').Am2_SimpleSlider();
 
+	$('#div_facebook').hide(); 
+	$('#form_hebergement').change(function(){
+	    if($('#form_hebergement').val() == 'facebook') {
+	        $('#div_facebook').show();
+	        $('#div_local').hide();
+	    } else {
+	        $('#div_facebook').hide();
+	        $('#div_local').show();
+	    } 
+	});
+
 
 });

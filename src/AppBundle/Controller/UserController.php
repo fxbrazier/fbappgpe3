@@ -32,8 +32,8 @@ class UserController extends Controller
             session_start();
         }
 
-        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
-            'app_secret' => '07c750201b982bbb3af84ab97d556099',
+        $fb = new Facebook\Facebook(['app_id' => '', // Replace {app-id} with your app id
+            'app_secret' => '',
             'default_graph_version' => 'v2.5']);
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['email', 'user_photos']; // Optional permissions
@@ -54,8 +54,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'app_id' => '',
+          'app_secret' => '',
           'default_graph_version' => 'v2.5',
         ]); 
 
@@ -93,8 +93,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'app_id' => '',
+          'app_secret' => '',
           'default_graph_version' => 'v2.5',
         ]); 
 
@@ -128,8 +128,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'app_id' => '',
+          'app_secret' => '',
           'default_graph_version' => 'v2.5',
         ]); 
 
@@ -163,41 +163,29 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '07c750201b982bbb3af84ab97d556099',
+          'app_id' => '',
+          'app_secret' => '',
           'default_graph_version' => 'v2.5',
         ]); 
 
         $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
 
-                try {
+        try {
 
-                  $response = $fb->get('/me?fields=albums{name,photos{name,source}}');
-                  $albums = $response->getDecodedBody();
-                  //$name = $response->getName();
-                  //var_dump($name);die;
-                  var_dump($albums);die;
+            $response = $fb->get('/me?fields=albums{name,photos{name,source}}');
+            $albums = $response->getDecodedBody();
 
-                  /*foreach ($albums["albums"]["data"] as $album) {
-                    echo "<h1>".$album["name"]."</h1>";
-                    if (isset($album["photos"])) {
-                      foreach ($album["photos"]["data"] as $photo) {
-                        echo "<img width='100px' src='".$photo["source"]."'>";
-                      }
-                    }
-                  }*/
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
+        }
 
-                } catch(Facebook\Exceptions\FacebookResponseException $e) {
-                  // When Graph returns an error
-                  echo 'Graph returned an error: ' . $e->getMessage();
-                  exit;
-                } catch(Facebook\Exceptions\FacebookSDKException $e) {
-                  // When validation fails or other local issues
-                  echo 'Facebook SDK returned an error: ' . $e->getMessage();
-                  exit;
-                }
-
-                return $albums;
+        return $albums;
     }
 
     /**

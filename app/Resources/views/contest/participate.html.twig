@@ -7,8 +7,24 @@
             Bonjour {{name}}, pour participer à ce concours veuillez importer une image ou sélectionner une image facebook.
 
             {{form_start(form)}}
-            {{form_widget(form)}}
+                {{ form_row(form.hebergement) }}
+                {{ form_row(form.name) }}
+                <div id="div_local">
+                {{ form_row(form.link) }}
+                </div>
+                <div id="div_facebook">
+                {% for album in albums.albums.data %}
+                    <h1>{{ album.name }}</h1>
+                    {% if album.photos is defined %}
+                        {% for photo in album.photos.data %}
+                            <img width='100px' src='{{ photo.source }}'>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                </div>
+                {{ form_row(form.valider) }}
             {{form_end(form)}}
+
             </div>
         </div>
     </div>
