@@ -45,6 +45,13 @@ class Picture
     /**
      * @var int
      *
+     * @ORM\Column(name="id_user", type="integer")
+     */
+    private $id_user;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="id_contest", type="integer")
      */
     private $id_contest;

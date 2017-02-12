@@ -58,16 +58,23 @@ $(document).ready(function(){
 	//GALERY
 	$('.gallery-img').Am2_SimpleSlider();
 
-	$('#div_facebook').hide(); 
-	$('#form_hebergement').change(function(){
-	    if($('#form_hebergement').val() == 'facebook') {
-	        $('#div_facebook').show();
-	        $('#div_local').hide();
-	    } else {
-	        $('#div_facebook').hide();
-	        $('#div_local').show();
-	    } 
-	});
+	var hebergement = $('#form_hebergement').val();
+	selectHebergement();
 
+    $('#form_hebergement').change(function(){
+    	hebergement = $('#form_hebergement').val();
+    	selectHebergement();
+    });
 
+    function selectHebergement(){
+    	if(hebergement == 'facebook') {
+            $('#div_facebook').show();
+            $('#div_local').hide();
+            $('#form_link').removeAttr("required");
+        } else {
+            $('#div_facebook').hide();
+            $('#div_local').show();
+            $('#form_link').required = true;
+        } 
+    }
 });

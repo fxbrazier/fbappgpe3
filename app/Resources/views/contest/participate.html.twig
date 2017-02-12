@@ -17,7 +17,10 @@
                     <h1>{{ album.name }}</h1>
                     {% if album.photos is defined %}
                         {% for photo in album.photos.data %}
-                            <img width='100px' src='{{ photo.source }}'>
+                            <label>
+                              <input type="radio" name="select-img" value="{{ photo.source }}" />
+                              <img src="{{ photo.source }}">
+                            </label>
                         {% endfor %}
                     {% endif %}
                 {% endfor %}

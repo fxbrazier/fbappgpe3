@@ -90,7 +90,7 @@ class PictureController extends Controller
               'label' => 'Image',
               'class' => 'form-control',
               'style' => 'margin-bottom:15px',
-              'required' => true
+              'required' => false
             )))
           ->add('hebergement', ChoiceType::class, array(
             'choices'  => array(
@@ -112,24 +112,29 @@ class PictureController extends Controller
           $form->handleRequest($request); 
 
           //handle request add contest form
-          if($form->isSubmitted() && $form->isValid()){ 
+          if($form->isSubmitted() && $form->isValid()){
 
+                $hebergement = $form['hebergement']->getData();
                 $name = $form['name']->getData();
-                $link =  $form['link']->getData();  
+                if ($hebergement == 'facebook') {
+                  $link_name = $_POST["select-img"];
+                }else{
+                  $link =  $form['link']->getData();
 
-                //dossier de destination
-                $dir = $this->get('kernel')->getRootDir() . '/../web/images/';  
+                  //dossier de destination
+                  $dir = $this->get('kernel')->getRootDir() . '/../web/images/';    
 
-                //génération d'un nom unique pour le fichier uploadé
-                $link_name = hash('sha512', session_id().microtime());
-                $extension = $link->guessExtension(); 
+                  //génération d'un nom unique pour le fichier uploadé
+                  $link_name = hash('sha512', session_id().microtime());
+                  $extension = $link->guessExtension();   
 
-                $link_name = $link_name.'.'.$extension; 
+                  $link_name = $link_name.'.'.$extension;   
 
-                $link->move($dir, $link_name);  
+                  $link->move($dir, $link_name); 
+                }  
 
                 $picture->setName($name);
-                $picture->setLink($link);
+                $picture->setLink($link_name);
                 $picture->setGeolocalisation('');
                 $picture->setidUser('1');
                 $picture->setidContest($id);  
