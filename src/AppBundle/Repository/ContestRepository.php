@@ -10,4 +10,12 @@ namespace AppBundle\Repository;
  */
 class ContestRepository extends \Doctrine\ORM\EntityRepository
 {
+	function findCurrentContest($today){
+		$qb = $this->createQueryBuilder('c')
+    		->where('c.startDate < :today')
+    		->andWhere('c.endDate > :today')
+    		->setParameter('today', $today);
+
+		return $qb->getQuery()->getResult();
+	}
 }
