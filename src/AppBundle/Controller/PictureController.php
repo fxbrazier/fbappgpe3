@@ -159,5 +159,18 @@ class PictureController extends Controller
         return $this->redirectToRoute('login');
       }
     }
+
+    /**
+     * @Route("/picture/{id}", name="picture_picture")
+     */
+    public function pictureAction($id){
+        $picture = $this->getDoctrine()
+                      ->getRepository('AppBundle:Picture')
+                      ->findOneBy(array('id' => $id));
+
+        return $this->render('picture/picture.html.twig', array(
+            'picture' => $picture,
+            ));
+    }
 }
 
