@@ -163,7 +163,6 @@ class ContestController extends Controller
                   'error',
                   $error_message[0]
                 );
-                //return $this->redirectToRoute('contest_list');  
             }else{
               $contest->setName($name);
               $contest->setDescription($description);
@@ -265,39 +264,93 @@ class ContestController extends Controller
         //handle request add contest form
         if($form->isSubmitted() && $form->isValid()){
 
-              $name = $form['name']->getData();
-              $description =  $form['description']->getData();
-              $startDate = $form['startDate']->getData();
-              $endDate = $form['endDate']->getData();
-              $startDate = $form['startDate']->getData();
-              $prize = $form['prize']->getData();
-              $status = $form['status']->getData();
+          // get vars
+          $name = $form['name']->getData();
+          $description =  $form['description']->getData();
+          $startDate = $form['startDate']->getData();
+          $endDate = $form['endDate']->getData();
+          $startDate = $form['startDate']->getData();
+          $prize = $form['prize']->getData();
+          $status = $form['status']->getData();
 
-              if($status == 'published'){
-                $status = 1;
-              }else{
-                $status = 0;
-              }
+          // Cheking form variables          
+          $repository = $this->getDoctrine()->getRepository('AppBundle:Contest');
+          
+          $checkName = $repository->findOneByName( $name );
 
-              $contest->setName($name);
-              $contest->setDescription($description);
-              $contest->setStartDate($startDate);
-              $contest->setStartDate($endDate);
-              $contest->setPrize($prize);
-              $contest->setStatus($status);
-              $em = $this->getDoctrine()->getManager();
-              $contest = $em->getRepository('AppBundle:Contest')->find($id);
-              // tells Doctrine you want to (eventually) save the contest (no queries yet)
-              $em->persist($contest);
+          if( $checkName != null && $checkName->getId() != $id ){
+            $error = true;
+            $error_message[] = 'the name is already in use';
 
+          }
+          elseif( $startDate > $endDate  ){
+            $error = true;
+            $error_message[] = 'the end date need to be after the starting date';
+
+          }
+          elseif( $status != 'published' && $status != 'hide' ){
+            $error = true;
+            $error_message[] = 'Wrong status';
+
+          }
+          elseif( strlen( $prize ) < 3 ){
+            $error = true;
+            $error_message[] = 'Prize needs to be at least 3 characters long';
+
+          }
+
+
+          // createQueryBuilder() automatically selects FROM AppBundle:Contest
+          // and aliases it to "c"
+          // get contest that have a ending date after This contest starting date
+          $query = $repository->createQueryBuilder('c')
+              ->where('c.endDate > :startDate')
+              ->setParameter('startDate', $startDate)
+              ->orderBy('c.endDate', 'DESC')
+              ->getQuery();
+
+          $checkStartDate = $query->getResult();
+                      // to get just one result:
+          // $product = $query->setMaxResults(1)->getOneOrNullResult();
+
+          if( !empty( $checkStartDate ) ){
+            $error = true;
+            $lowerDate = $checkStartDate[0]->getEndDate()->format('Y-m-d H:i:s');
+            $error_message[] = 'pic a date that is after the ' . $lowerDate; 
+          }
+
+
+          if($status == 'published'){
+            $status = 1;
+          }else{
+            $status = 0;
+          }
+
+          if( $error ){
               // actually executes the queries (i.e. the INSERT query)
-              $em->flush();
               $this->addFlash(
-                'notice',
-                'Contest Updated'
+                'error',
+                $error_message[0]
               );
-              //return $this->redirectToRoute('contest_edit/{id}');
+          }else{
+            $contest->setName($name);
+            $contest->setDescription($description);
+            $contest->setStartDate($startDate);
+            $contest->setStartDate($endDate);
+            $contest->setPrize($prize);
+            $contest->setStatus($status);
+            $em = $this->getDoctrine()->getManager();
+            $contest = $em->getRepository('AppBundle:Contest')->find($id);
+            // tells Doctrine you want to (eventually) save the contest (no queries yet)
+            $em->persist($contest);
 
+            // actually executes the queries (i.e. the INSERT query)
+            $em->flush();
+            $this->addFlash(
+              'notice',
+              'Contest Updated'
+            );
+          }
         }
         return $this->render('contest/edit.html.twig', array(
             'contest' => $contest,

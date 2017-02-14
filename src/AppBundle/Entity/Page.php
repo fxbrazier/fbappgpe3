@@ -31,6 +31,13 @@ class Page
     /**
      * @var string
      *
+     * @ORM\Column(name="url", type="string", length=125)
+     */
+    private $url;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="Content", type="string", length=255)
      */
     private $content;
@@ -68,6 +75,30 @@ class Page
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set url
+     *
+     * @param string $url
+     *
+     * @return Page
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     /**

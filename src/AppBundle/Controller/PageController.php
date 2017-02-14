@@ -21,27 +21,20 @@ class PageController extends Controller
 {
 
     /**
-     * @Route("/page/{page_name}", name="page")
+     * @Route("/page/{page_url}", name="page")
      */
-    public function indexAction($page_name, Request $request){
-
-        $page = $this->getDoctrine()
-                      ->getRepository('AppBundle:Page')
-                      ->findOneByTitle($page_name);
-        /*return $this->render('page/'. $page_name .'.html.twig', array(
-            'page' => $page,
-            ));*/
-        return $this->render('page/index.html.twig', array(
-            'page' => $page,
-            ));
+    public function indexAction($page_url, Request $request){
+      
+      $page = $this->getDoctrine()
+                    ->getRepository('AppBundle:Page')
+                    ->findOneByUrl($page_url);
+      /*return $this->render('page/'. $page_name .'.html.twig', array(
+          'page' => $page,
+          ));*/
+      return $this->render('page/index.html.twig', array(
+          'page' => $page,
+          ));
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -87,35 +80,53 @@ class PageController extends Controller
       //handle request add page form
 	    if($form->isSubmitted() && $form->isValid()){
 
+            $error = false;
+            $error_message = [];
+
             $title = $form['title']->getData();
             $content =  $form['content']->getData();
-            /*// Gets the last page
+            $url = str_replace( ' ', '-', $title);
+
+            // Check variables
             $repository = $this->getDoctrine()->getRepository('AppBundle:Page');
-            // query for multiple products matching the given name, ordered by price
-            $lastPage = $repository->findBy(
-                array('endDate' => 'ASC')
-            );
-            dump($lastPage);
-            die();
-            if( $lastPage ){ 
+            $checkTitle = $repository->findOneByTitle( $title );
+            if( !empty( $checkTitle ) ){
+              $error = true;
+              $error_message[] = 'The title is already been used';
             }
-            */
+            elseif( strlen( $title ) < 3 || strlen( $title ) > 125 ){
+              $error = true;
+              $error_message[] = 'The title is too long';
+            }
+            elseif( strlen( $content ) < 3 ) {
+              $error = true;
+              $error_message[] = 'The content is too short';
+            }
 
-            $page->setTitle($title);
-            $page->setContent($content);
-            $em = $this->getDoctrine()->getManager();
 
-            // tells Doctrine you want to (eventually) save the page (no queries yet)
-            $em->persist($page);
+            if( $error ){
+                $this->addFlash(
+                  'error',
+                  $error_message[0]
+                );
+            }
+            else{
+              $page->setTitle($title);
+              $page->setUrl($url);
+              $page->setContent($content);
+              $em = $this->getDoctrine()->getManager();
 
-            // actually executes the queries (i.e. the INSERT query)
-            $em->flush();
-            $this->addFlash(
-              'notice',
-              'Page Added'
-            );
-            return $this->redirectToRoute('page_list');
+              // tells Doctrine you want to (eventually) save the page (no queries yet)
+              $em->persist($page);
 
+              // actually executes the queries (i.e. the INSERT query)
+              $em->flush();
+              $this->addFlash(
+                'notice',
+                'Page Added'
+              );
+              return $this->redirectToRoute('page_list');
+            }
 	    }
 
 	    return $this->render('page/create.html.twig', array('form' => $form->createView()));
@@ -167,11 +178,38 @@ class PageController extends Controller
         //handle request add page form
         if($form->isSubmitted() && $form->isValid()){
 
-              $title = $form['title']->getData();
-              $content =  $form['content']->getData();
+            $error = false;
+            $error_message = [];
+            
+            $title = $form['title']->getData();
+            $content =  $form['content']->getData();
+            $url = str_replace( ' ', '-', $title);
 
+            // Check variables
+            $repository = $this->getDoctrine()->getRepository('AppBundle:Page');
+            $checkTitle = $repository->findOneByTitle( $title );
 
-              $page->setTile($title);
+            if( !empty( $checkTitle ) &&  $checkTitle->getId() != $id ){
+              $error = true;
+              $error_message[] = 'The title is already been used';
+            }
+            elseif( strlen( $title ) < 3 || strlen( $title ) > 125 ){
+              $error = true;
+              $error_message[] = 'The title is too long';
+            }
+            elseif( strlen( $content ) < 3 ) {
+              $error = true;
+              $error_message[] = 'The content is too short';
+            }
+
+            if( $error ){
+              $this->addFlash(
+                'error',
+                $error_message[0]
+              );
+            }else{
+              $page->setTitle($title);
+              $page->setUrl($url);
               $page->setContent($content);
 
               $em = $this->getDoctrine()->getManager();
@@ -185,8 +223,7 @@ class PageController extends Controller
                 'notice',
                 'Page Updated'
               );
-              //return $this->redirectToRoute('page_edit/{id}');
-
+            }
         }
         return $this->render('page/edit.html.twig', array(
             'page' => $page,
