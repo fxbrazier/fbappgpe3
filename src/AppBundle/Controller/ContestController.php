@@ -107,7 +107,9 @@ class ContestController extends Controller
 
             $repository = $this->getDoctrine()->getRepository('AppBundle:Contest');
             // Cheking form variables          
+            
             $checkName = $repository->findOneByName( $name );
+
             if( $checkName != null ){
               $error = true;
               $error_message[] = 'the name is already in use';
@@ -129,11 +131,25 @@ class ContestController extends Controller
 
             }
 
-            // Gets the last contest
-            // query for multiple products matching the given name, ordered by price
-            /*$lastContest = $repository->findBy(
-                array('endDate' => 'ASC')
-            );  */
+
+            // createQueryBuilder() automatically selects FROM AppBundle:Contest
+            // and aliases it to "c"
+            // get contest that have a ending date after This contest starting date
+            $query = $repository->createQueryBuilder('c')
+                ->where('c.endDate > :startDate')
+                ->setParameter('startDate', $startDate)
+                ->orderBy('c.endDate', 'DESC')
+                ->getQuery();
+
+            $checkStartDate = $query->getResult();
+                        // to get just one result:
+            // $product = $query->setMaxResults(1)->getOneOrNullResult();
+
+            if( !empty( $checkStartDate ) ){
+              $error = true;
+              $lowerDate = $checkStartDate[0]->getEndDate()->format('Y-m-d H:i:s');
+              $error_message[] = 'pic a date that is after the ' . $lowerDate; 
+            }
 
             if($status == 'published'){
               $status = 1;
