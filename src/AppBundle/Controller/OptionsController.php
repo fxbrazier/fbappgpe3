@@ -30,9 +30,14 @@ class OptionsController extends Controller
         foreach ($_options as $option) {
           $options[$option->getOptionName()] = $option->getOptionContent();
         }
-        //var_dump($options);
+        //dump($options);
         // Options form
-        $form = $this->createFormBuilder($options)
+        $form = $this->createFormBuilder($options,
+              [
+                'attr'=>array('novalidate'=>'novalidate') //add novalidate attribute to form
+              ]
+
+          )
         ->add('first_color_theme', TextType::class, [
           'attr' => [
             //'id' => 'color-picker',
@@ -43,16 +48,11 @@ class OptionsController extends Controller
             //'id' => 'color-picker-2',
             'style' => 'margin-bottom:15px',
           ]])
-        ->add('cgu', TextareaType::class, [
+        ->add('copyright', TextareaType::class, [
           'attr' => [
             'class' => 'form-control',
             'style' => 'margin-bottom:15px',
             //'value'=> $options['cgu'];
-          ]])
-        ->add('rules', TextareaType::class, [
-          'attr' => [
-            'class' => 'form-control',
-            'style' => 'margin-bottom:15px'
           ]])
         ->add('update options', SubmitType::class, [
           'attr' => [
@@ -71,20 +71,23 @@ class OptionsController extends Controller
               $second_color_theme = $form['second_color_theme']->getData();*/
               
               $_options = [
-                'cgu' => $form['cgu']->getData(),
-                'rules' => $form['rules']->getData(),
+                'copyright' => $form['copyright']->getData(),
                 'first_color_theme' => $form['first_color_theme']->getData(),
                 'second_color_theme' => $form['second_color_theme']->getData()
               ];
-              var_dump($_options['cgu']);
+
+
+
               foreach ($_options as $name => $content) {
+                $em = $this->getDoctrine()->getManager();
+
+                $options = $em->getRepository('AppBundle:Options')->findOneBy( ['optionName' => $name ] );
+
+                //$options = new Options;
                 $options->setOptionName($name);
                 $options->setOptionContent($content);
-                $em = $this->getDoctrine()->getManager();
-                $options = $em->getRepository('AppBundle:Options')->findOneBy( ['option_name' => $name ] );
-                var_dump($options);
+                
                 // tells Doctrine you want to (eventually) save the option (no queries yet)
-              die();
                 $em->persist($options);
 
                 // actually executes the queries (i.e. the INSERT query)

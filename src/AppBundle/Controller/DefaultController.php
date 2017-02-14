@@ -49,6 +49,16 @@ class DefaultController extends Controller
           'SELECT COUNT(c)
           FROM AppBundle:Contest c'
       );
+
+
+      /*
+        $contest = $this->getDoctrine()
+                      ->getRepository('AppBundle:Contest')
+                      ->findCurrentContest(date("Y-m-d H:i:s"));
+
+        $id = $contest[0]->getId();
+
+        */
        
       $nbContest = $query->getResult()[0][1]; //get result query
 
