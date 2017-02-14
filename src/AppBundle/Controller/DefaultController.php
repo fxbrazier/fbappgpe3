@@ -36,5 +36,24 @@ class DefaultController extends Controller
         ]);
     }
 
-    
+
+
+  /**
+   * @Route("/myadmin", name="picture_list")
+   */
+  public function listAction(){
+
+      $em = $this->getDoctrine()->getManager(); //we call Doctrine
+
+      $query = $em->createQuery( //create the query
+          'SELECT COUNT(c)
+          FROM AppBundle:Contest c'
+      );
+       
+      $nbContest = $query->getResult()[0][1]; //get result query
+
+      return $this->render('default/dashboard.html.twig', array(
+          'nbContest' => $nbContest,
+          ));
+  }
 }

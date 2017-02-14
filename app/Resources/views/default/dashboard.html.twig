@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<h2>Dashboard</h2>
+
+
+     <div class="row"> 	
+		<div class="col-sm-4">
+	        <div class="panel panel-warning">
+	            <div class="panel-heading">
+	            	<h3 class="panel-title">Number of contest</h3>
+	            </div>
+	            <div class="panel-body">
+	            	{{nbContest}}
+	            </div>
+	        </div>
+	    </div>
+		<div class="col-sm-4">
+	        <div class="panel panel-warning">
+	            <div class="panel-heading">
+	            	<h3 class="panel-title">Number of users</h3>
+	            </div>
+	            <div class="panel-body">
+	            	{{nbContest}}
+	            </div>
+	        </div>
+	    </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-3 cta-button">
+            <a href="myadmin/contest/create" class="btn btn-lg btn-block btn-default">Add new contest</a>
+        </div>
+        <div class="col-md-3 cta-button">
+            <a href="myadmin/page/create" class="btn btn-lg btn-block btn-default">Add new page</a>
+        </div>
+        <div class="col-md-3 cta-button">
+            <a href="#" class="btn btn-lg btn-block btn-default">Go for It!</a>
+        </div>
+     </div> 
+
+
+{% endblock %}
