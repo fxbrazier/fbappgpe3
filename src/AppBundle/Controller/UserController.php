@@ -31,12 +31,10 @@ class UserController extends Controller
         if (!session_id()) {
             session_start();
         }
-        
-        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
-            'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-            'default_graph_version' => 'v2.5']);
+
+        $fb = $this->getFacebook();
         $helper = $fb->getRedirectLoginHelper();
-        $permissions = ['email', 'user_photos']; // Optional permissions
+        $permissions = ['email', 'user_photos', 'publish_actions']; // Optional permissions
         $loginUrl = $helper->getLoginUrl('http://localhost/fbappgpe3/web/app_dev.php/loginCallback', $permissions);
 
         return $this->render('user/login.html.twig', array(
@@ -52,10 +50,7 @@ class UserController extends Controller
         if (!session_id()) {
             session_start();
         }
-        //var_dump($_SERVER['SERVER_NAME']);
-        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
-            'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-            'default_graph_version' => 'v2.5']);
+        $fb = $this->getFacebook();
 
         $helper = $fb->getRedirectLoginHelper();
 
@@ -87,6 +82,8 @@ class UserController extends Controller
             
         }else{
             unset($_SESSION["ACCESS_TOKEN"]);
+            unset($_SESSION['user_id']);
+            unset($_SESSION['user_name']);
         }
 
         return $this->redirectToRoute('homepage');
@@ -101,30 +98,33 @@ class UserController extends Controller
             session_start();
         }
 
-        $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-          'default_graph_version' => 'v2.5',
-        ]); 
+        if (!empty($_SESSION['ACCESS_TOKEN'])){
+            $fb = $this->getFacebook();
 
-        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
 
-        try {
+            try {
+                if(!empty($_SESSION['rerequest'])){
+                    unset($_SESSION['rerequest']);
+                }
+                $response = $fb->get('/me?fields=id,first_name,last_name,email');
+                $user = $response->getDecodedBody();
+                $_SESSION['user_id']=$user['id'];
+                $_SESSION['user_name']=$user['first_name'].' '.$user['last_name'];
+                return $user;
 
-            $response = $fb->get('/me?fields=id,first_name,last_name,email,name');
-            $user = $response->getGraphUser();
-
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
+            } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                // When Graph returns an error
+                echo 'Graph returned an error: ' . $e->getMessage();
+                exit;
+            } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+        }else{
+            return $this->redirectToRoute('login');
         }
-
-        return $user;
     }
 
     /**
@@ -135,31 +135,47 @@ class UserController extends Controller
         if (!session_id()) {
             session_start();
         }
+        if (!empty($_SESSION['ACCESS_TOKEN'])){
+            if (!empty($_SESSION['road'])) {
+                unset($_SESSION['road']);
+            }
 
-        $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-          'default_graph_version' => 'v2.5',
-        ]); 
+            $fb = $this->getFacebook();
 
-        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
 
-        try {
+            try {
+                $permissionMiss = !in_array('user_photos', $this->getPermissionsGrantedAction());
+                if ($permissionMiss && empty($_SESSION['rerequest'])){
+                    $_SESSION['road'] = 'get_albums_fb';
+                    $_SESSION['rerequest'] = true;
+                    return $this->rerequestDeclinedPermissionsAction(['user_photos']);
 
-            $response = $fb->get('/me?fields=albums{name,photos{name,source}}');
-            $albums = $response->getDecodedBody();
+                }elseif($permissionMiss && !empty($_SESSION['rerequest'])){
+                    $error = "Permissions are missing :\n";
+                    $error.="- user_photos";
+                    return $error;
+                }
+                if(!empty($_SESSION['rerequest'])){
+                    unset($_SESSION['rerequest']);
+                }
+                $response = $fb->get('/me?fields=albums{name,photos{name,source}}');
+                $albums = $response->getDecodedBody();
 
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
+                return $albums;
+
+            } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                // When Graph returns an error
+                echo 'Graph returned an error: ' . $e->getMessage();
+                exit;
+            } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+        }else{
+            return $this->redirectToRoute('login');
         }
-
-        return $albums;
     }
 
     /**
@@ -188,6 +204,71 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/post_feed", name="post_feed")
+     */
+    public function postFeedFbAction($message, $caption, $photo_id)
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        if (!empty($_SESSION['road'])) {
+            unset($_SESSION['road']);
+        }
+        if (!empty($_SESSION['ACCESS_TOKEN'])){
+            $fb = $this->getFacebook();
+
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+            try {
+                $permissionGrant = $this->getPermissionsGrantedAction();
+                $permissionRequired = ['user_photos', 'publish_actions'];
+                $permissionMissing = array_diff($permissionRequired, $permissionGrant);
+                if (!empty($permissionMissing) && empty($_SESSION['rerequest'])){
+                    $_SESSION['road'] = 'post_feed';
+                    $_SESSION['rerequest'] = true;
+                    return $this->rerequestDeclinedPermissionsAction($permissionMissing);
+                }elseif(!empty($permissionMissing) && !empty($_SESSION['rerequest'])){
+                    $error = "Permissions are missing :\n";
+                    foreach ($permissionMissing as $miss){
+                        $error.="- ".$miss."\n";
+                    }
+                    return $error;
+                }
+                if(!empty($_SESSION['rerequest'])){
+                    unset($_SESSION['rerequest']);
+                }
+                //$message = 'a message';
+                //$caption = "I choose that picture for the contest !";
+                //$photo_id = '10210997875202347';
+
+                $data = [
+                    'message' => $message,
+                    'caption' => $caption,
+                    //'link' => redirect to app,
+                    'object_attachment' => $photo_id
+                ];
+
+                /* handle the result */
+                $response = $fb->post('/me/feed', $data);
+                $postFeed = $response->getDecodedBody();
+                // id post return : $postFeed['id']
+                return true;
+
+            } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                // When Graph returns an error
+                echo 'Graph returned an error: ' . $e->getMessage();
+                exit;
+            } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
     * @Route("/login_check", name="login_check")
     */
     public function checkIfLogAction()
@@ -196,7 +277,7 @@ class UserController extends Controller
             session_start();
         }
 
-        if (isset($_SESSION["ACCESS_TOKEN"])) {
+        if (isset($_SESSION["ACCESS_TOKEN"]) || !empty($_SESSION['ACCESS_TOKEN'])) {
             return true;
         }else{
             return false;
@@ -204,27 +285,78 @@ class UserController extends Controller
     }
 
     /**
-    * @Route("/login_admin_check", name="login_admin_check")
-    */
-    public function checkIfLogAdminAction()
+     * @Route("/get_permissions", name="get_permissions")
+     */
+    public function getPermissionsGrantedAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        if(!empty($_SESSION['ACCESS_TOKEN'])){
+            $permissionsGranted = [];
+            $fb = $this->getFacebook();
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+            $response = $fb->get('/'.$_SESSION["user_id"].'/permissions');
+            $permission = $response->getDecodedBody();
+            foreach ($permission['data'] as $perm){
+                if($perm['status'] == 'granted'){
+                    array_push($permissionsGranted, $perm['permission']);
+                }
+            }
+            return $permissionsGranted;
+        }else{
+            return $this->redirectToRoute('login');
+        }
+
+    }
+
+    /**
+     * @Route("/rerequest_declined_permissions", name="rerequest_declined_permissions")
+     */
+    public function rerequestDeclinedPermissionsAction($permissions = [])
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        $permissionsGranted = $this->getPermissionsGrantedAction();
+        $permissionsReRequested = array_diff($permissions, $permissionsGranted);
+        if(!empty($permissionsReRequested)){
+            return $this->permissionReRequestAction($permissionsReRequested);
+        }else{
+            return true;
+        }
+
+    }
+
+    /**
+     * @Route("/permissions_rerequest", name="permissions_rerequest")
+     */
+    public function permissionReRequestAction($permissions)
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        $fb = $this->getFacebook();
+        $helper = $fb->getRedirectLoginHelper();
+        $loginUrl = $helper->getReRequestUrl('http://localhost/fbappgpe3/web/app_dev.php/rerequestCallback', $permissions);
+        return $this->redirect($loginUrl);
+    }
+
+    /**
+     * @Route("/rerequestCallback", name="permissions_rerequest_callback")
+     */
+    public function rerequestCallbackAction()
     {
         if (!session_id()) {
             session_start();
         }
 
-        $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-          'default_graph_version' => 'v2.5',
-        ]); 
+        $fb = $this->getFacebook();
 
-        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+        $helper = $fb->getRedirectLoginHelper();
 
         try {
-
-            $response = $fb->get('/me?fields=roles');
-            $user = $response->getGraphUser();
-
+            $accessToken = $helper->getAccessToken();
         } catch(Facebook\Exceptions\FacebookResponseException $e) {
             // When Graph returns an error
             echo 'Graph returned an error: ' . $e->getMessage();
@@ -235,7 +367,140 @@ class UserController extends Controller
             exit;
         }
 
-        return $user;
+        if(isset($accessToken)){
+            $_SESSION["ACCESS_TOKEN"] = (string) $accessToken;
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+            $response = $fb->get('/me');
+            $user = $response->getDecodedBody();
+            $_SESSION['user_id']=$user['id'];
+            $_SESSION['user_name']=$user['first_name'].' '.$user['last_name'];
+        }else{
+            unset($_SESSION["ACCESS_TOKEN"]);
+            unset($_SESSION['user_id']);
+            unset($_SESSION['user_name']);
+        }
+        if(!empty($_SESSION['road'])){
+            return $this->redirectToRoute($_SESSION['road']);
+        }else{
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
+    * @Route("/login_admin_check", name="login_admin_check")
+    */
+    /**
+     * @Route("/login_admin_check", name="login_admin_check")
+     */
+    public function checkIfLogAdminAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        if (!empty($_SESSION['ACCESS_TOKEN'])){
+            if (!empty($_SESSION['road'])) {
+                unset($_SESSION['road']);
+            }
+
+            $fb = $this->getFacebook();
+
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+            try {
+
+                if(!empty($_SESSION['rerequest'])){
+                    unset($_SESSION['rerequest']);
+                }
+
+                $response = $fb->get('/'.$this->app_id.'/roles/', "".$this->app_id."|".$this->app_secret."");
+                $admin = $response->getDecodedBody();
+                foreach ($admin['data'] as $adm){
+                    if($adm['app_id'] == $this->app_id && $adm['user'] == $_SESSION['user_id'] && $adm['role'] == 'administrators'){
+                        return true;
+                    }
+                }
+                return false;
+
+            } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                // When Graph returns an error
+                echo 'Graph returned an error: ' . $e->getMessage();
+                exit;
+            } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/post_picture", name="post_picture")
+     */
+    public function postPictureFbAction()
+    {
+        if (!session_id()) {
+            session_start();
+        }
+        if(!empty($_SESSION['ACCESS_TOKEN'])){
+            if (!empty($_SESSION['road'])) {
+                unset($_SESSION['road']);
+            }
+
+            $fb = $this->getFacebook();
+
+            $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+            try {
+                $permissionGrant = $this->getPermissionsGrantedAction();
+                $permissionRequired = ['publish_actions'];
+                $permissionMissing = array_diff($permissionRequired, $permissionGrant);
+                if (!empty($permissionMissing) && empty($_SESSION['rerequest'])){
+                    $_SESSION['road'] = 'post_picture';
+                    $_SESSION['rerequest'] = true;
+                    return $this->rerequestDeclinedPermissionsAction($permissionMissing);
+                }elseif(!empty($permissionMissing) && !empty($_SESSION['rerequest'])){
+                    $error = "Permissions are missing :\n";
+                    foreach ($permissionMissing as $miss){
+                        $error.="- ".$miss."\n";
+                    }
+                    return $error;
+                }
+                if(!empty($_SESSION['rerequest'])){
+                    unset($_SESSION['rerequest']);
+                }
+                if (!empty($_FILES)){
+                    $message = 'a message';
+
+                    $data = [
+                        'message' => $message,
+                        'source' => $fb->fileToUpload($_FILES['avatar']['tmp_name']),
+                    ];
+
+                    /* handle the result */
+
+                    $response = $fb->post('/me/photos', $data);
+                    $post_id = $response->getDecodedBody();
+
+                    return $post_id['id'];
+                }else{
+                    return "Image is missing !";
+                }
+
+            } catch(Facebook\Exceptions\FacebookResponseException $e) {
+                // When Graph returns an error
+                echo 'Graph returned an error: ' . $e->getMessage();
+                exit;
+            } catch(Facebook\Exceptions\FacebookSDKException $e) {
+                // When validation fails or other local issues
+                echo 'Facebook SDK returned an error: ' . $e->getMessage();
+                exit;
+            }
+
+        }else{
+            return $this->redirectToRoute('login');
+        }
     }
 
     /**
@@ -248,7 +513,9 @@ class UserController extends Controller
         }
 
         unset($_SESSION["ACCESS_TOKEN"]);
-        //var_dump($_SESSION);die;
+        unset($_SESSION["user_id"]);
+        unset($_SESSION["user_name"]);
+
         return $this->redirectToRoute('homepage');
     }
 }

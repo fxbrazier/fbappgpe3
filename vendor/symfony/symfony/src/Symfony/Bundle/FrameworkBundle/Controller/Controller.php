@@ -26,6 +26,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Facebook;
 
 /**
  * Controller is a simple implementation of a Controller.
@@ -416,5 +417,16 @@ abstract class Controller implements ContainerAwareInterface
         }
 
         return $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($id, $token));
+    }
+
+    protected $app_id = '1780532462163734';
+    protected $app_secret = '48f112e5053eb831fc2393a5447a3e84';
+
+    protected function getFacebook(){
+        return $fb = new Facebook\Facebook([
+            'app_id' => $this->app_id,
+            'app_secret' => $this->app_secret,
+            'default_graph_version' => 'v2.5',
+        ]);
     }
 }
