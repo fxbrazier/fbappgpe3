@@ -21,9 +21,11 @@
 		        <td>{{contest.status}}</td>
 				<td>
 					<a href="contest/details/{{contest.id}}" class="btn btn-success">view</a>
-					<a href="contest/edit/{{contest.id}}" class="btn btn-default">edit</a>
+			        {% if contest.status == 1 %}
+						<a href="contest/edit/{{contest.id}}" class="btn btn-default">edit</a>   
+					{% endif %}  
 					<a href="contest/delete/{{contest.id}}" class="btn btn-danger">delete</a>
-				</td>	        
+				</td>	   
 		      </tr>
 		    {% endfor %}
 	    </tbody>

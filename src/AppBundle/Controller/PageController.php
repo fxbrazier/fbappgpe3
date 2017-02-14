@@ -45,7 +45,7 @@ class PageController extends Controller
 
 
     /**
-     * @Route("/myadmin/page", name="page_list")
+     * @Route("/myadmin/pages", name="page_list")
      */
     public function listAction(){
       //phpinfo();
@@ -53,7 +53,7 @@ class PageController extends Controller
                       ->getRepository('AppBundle:Page')
                       ->findAll();
 
-        return $this->render('page/index.html.twig', array(
+        return $this->render('page/list.html.twig', array(
             'pages' => $pages,
             ));
     }

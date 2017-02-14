@@ -26,7 +26,9 @@ class ContestController extends Controller
       //phpinfo();
         $contests = $this->getDoctrine()
                       ->getRepository('AppBundle:Contest')
-                      ->findAll();
+                      ->findBy(
+                          array(), array('status' => 'DESC')                      
+                        );
 
         return $this->render('contest/index.html.twig', array(
             'contests' => $contests,
@@ -91,6 +93,9 @@ class ContestController extends Controller
       //handle request add contest form
 	    if($form->isSubmitted() && $form->isValid()){
 
+            $error = false;
+            $error_message = [];
+            // form variables
             $name = $form['name']->getData();
             $description =  $form['description']->getData();
             $startDate = $form['startDate']->getData();
@@ -99,21 +104,36 @@ class ContestController extends Controller
             $prize = $form['prize']->getData();
             $status = $form['status']->getData();
 
-            // Gets the last contest
+
             $repository = $this->getDoctrine()->getRepository('AppBundle:Contest');
-            // query for multiple products matching the given name, ordered by price
-            $lastContest = $repository->findBy(
-                array('endDate' => 'ASC')
-            );
-            dump($lastContest);
-            die();
-            if( $lastContest ){ 
+            // Cheking form variables          
+            $checkName = $repository->findOneByName( $name );
+            if( $checkName != null ){
+              $error = true;
+              $error_message[] = 'the name is already in use';
+
+            }
+            elseif( $startDate > $endDate  ){
+              $error = true;
+              $error_message[] = 'the end date need to be after the starting date';
+
+            }
+            elseif( $status != 'published' && $status != 'hide' ){
+              $error = true;
+              $error_message[] = 'Wrong status';
+
+            }
+            elseif( strlen( $prize ) < 3 ){
+              $error = true;
+              $error_message[] = 'Prize needs to be at least 3 characters long';
+
             }
 
-
-
-
-
+            // Gets the last contest
+            // query for multiple products matching the given name, ordered by price
+            /*$lastContest = $repository->findBy(
+                array('endDate' => 'ASC')
+            );  */
 
             if($status == 'published'){
               $status = 1;
@@ -121,24 +141,33 @@ class ContestController extends Controller
               $status = 0;
             }
 
-            $contest->setName($name);
-            $contest->setDescription($description);
-            $contest->setStartDate($startDate);
-            $contest->setStartDate($endDate);
-            $contest->setPrize($prize);
-            $contest->setStatus($status);
-            $em = $this->getDoctrine()->getManager();
+            if( $error ){
+                // actually executes the queries (i.e. the INSERT query)
+                $this->addFlash(
+                  'error',
+                  $error_message[0]
+                );
+                //return $this->redirectToRoute('contest_list');  
+            }else{
+              $contest->setName($name);
+              $contest->setDescription($description);
+              $contest->setStartDate($startDate);
+              $contest->setStartDate($endDate);
+              $contest->setPrize($prize);
+              $contest->setStatus($status);
+              $em = $this->getDoctrine()->getManager();
 
-            // tells Doctrine you want to (eventually) save the contest (no queries yet)
-            $em->persist($contest);
+              // tells Doctrine you want to (eventually) save the contest (no queries yet)
+              $em->persist($contest);
 
-            // actually executes the queries (i.e. the INSERT query)
-            $em->flush();
-            $this->addFlash(
-              'notice',
-              'Contest Added'
-            );
-            return $this->redirectToRoute('contest_list');
+              // actually executes the queries (i.e. the INSERT query)
+              $em->flush();
+              $this->addFlash(
+                'notice',
+                'Contest Added'
+              );
+              return $this->redirectToRoute('contest_list');              
+            }
 
 	    }
 

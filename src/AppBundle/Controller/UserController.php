@@ -32,8 +32,8 @@ class UserController extends Controller
             session_start();
         }
 
-        $fb = new Facebook\Facebook(['app_id' => '', // Replace {app-id} with your app id
-            'app_secret' => '',
+        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
+            'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
             'default_graph_version' => 'v2.5']);
         $helper = $fb->getRedirectLoginHelper();
         $permissions = ['email', 'user_photos']; // Optional permissions
@@ -54,8 +54,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '',
-          'app_secret' => '',
+          'app_id' => '1780532462163734',
+          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
           'default_graph_version' => 'v2.5',
         ]); 
 
@@ -93,8 +93,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '',
-          'app_secret' => '',
+          'app_id' => '1780532462163734',
+          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
           'default_graph_version' => 'v2.5',
         ]); 
 
@@ -128,8 +128,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '',
-          'app_secret' => '',
+          'app_id' => '1780532462163734',
+          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
           'default_graph_version' => 'v2.5',
         ]); 
 
@@ -163,8 +163,8 @@ class UserController extends Controller
         }
 
         $fb = new Facebook\Facebook([
-          'app_id' => '',
-          'app_secret' => '',
+          'app_id' => '1780532462163734',
+          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
           'default_graph_version' => 'v2.5',
         ]); 
 
