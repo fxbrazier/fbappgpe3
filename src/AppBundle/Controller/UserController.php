@@ -31,7 +31,7 @@ class UserController extends Controller
         if (!session_id()) {
             session_start();
         }
-
+        
         $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
             'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
             'default_graph_version' => 'v2.5']);
@@ -52,14 +52,12 @@ class UserController extends Controller
         if (!session_id()) {
             session_start();
         }
+        //var_dump($_SERVER['SERVER_NAME']);
+        $fb = new Facebook\Facebook(['app_id' => '1780532462163734', // Replace {app-id} with your app id
+            'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
+            'default_graph_version' => 'v2.5']);
 
-        $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-          'default_graph_version' => 'v2.5',
-        ]); 
-
-        $helper = $fb->getRedirectLoginHelper();  
+        $helper = $fb->getRedirectLoginHelper();
 
         try {
           $accessToken = $helper->getAccessToken();
@@ -70,12 +68,23 @@ class UserController extends Controller
         } catch(Facebook\Exceptions\FacebookSDKException $e) {
           // When validation fails or other local issues
           echo 'Facebook SDK returned an error: ' . $e->getMessage();
-          var_dump($helper->getError());
           exit;
         }   
 
         if(isset($accessToken)){
             $_SESSION["ACCESS_TOKEN"] = (string) $accessToken;
+            $user = $this->getInfosFbAction();
+
+            //on vérifie que l'utilisateur existe déja en base
+            $id_fb = $this->getDoctrine()
+                      ->getRepository('AppBundle:User')
+                      ->findBy(array('id_fb' => $user['id']));
+
+            //si il existe pas, on le créé
+            if (!$id_fb) {
+                $this->createUserAction($user);
+            }
+            
         }else{
             unset($_SESSION["ACCESS_TOKEN"]);
         }
@@ -87,41 +96,6 @@ class UserController extends Controller
      * @Route("/getInfosFb", name="user_infos_fb")
      */
     public function getInfosFbAction()
-    {
-        if (!session_id()) {
-            session_start();
-        }
-
-        $fb = new Facebook\Facebook([
-          'app_id' => '1780532462163734',
-          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
-          'default_graph_version' => 'v2.5',
-        ]); 
-
-        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
-
-        try {
-
-            $response = $fb->get('/me?fields=id,first_name,last_name,email,name');
-            $user = $response->getGraphUser();
-
-        } catch(Facebook\Exceptions\FacebookResponseException $e) {
-            // When Graph returns an error
-            echo 'Graph returned an error: ' . $e->getMessage();
-            exit;
-        } catch(Facebook\Exceptions\FacebookSDKException $e) {
-            // When validation fails or other local issues
-            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-            exit;
-        }
-
-        return $user;
-    }
-
-     /**
-     * @Route("/createOrUpdate", name="user_create_or_update")
-     */
-    public function createOrUpdateAction()
     {
         if (!session_id()) {
             session_start();
@@ -189,6 +163,31 @@ class UserController extends Controller
     }
 
     /**
+     * @Route("/createUser", name="user_create")
+     */
+    public function createUserAction($user)
+    {
+        $new_user = new User();
+        $new_user->setFirstname($user['first_name']);
+        $new_user->setLastname($user['last_name']);
+        $new_user->setEmail($user['email']);
+        $new_user->setBirthday('');
+        $new_user->setGender('');
+        $new_user->setTel('');
+        $new_user->setCity('');
+        $new_user->setIsDeleted('');
+        $new_user->setIsCreated(date("Y-m-d H:i:s"));
+        $new_user->setStatus('');
+        $new_user->setIdFb($user['id']);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($new_user); 
+
+        // actually executes the queries (i.e. the INSERT query)
+        $em->flush();
+    }
+
+    /**
     * @Route("/login_check", name="login_check")
     */
     public function checkIfLogAction()
@@ -213,11 +212,30 @@ class UserController extends Controller
             session_start();
         }
 
-        if ($this->checkIfLogAction()) {
-            
-        }else{
-            return false;
+        $fb = new Facebook\Facebook([
+          'app_id' => '1780532462163734',
+          'app_secret' => '48f112e5053eb831fc2393a5447a3e84',
+          'default_graph_version' => 'v2.5',
+        ]); 
+
+        $fb->setDefaultAccessToken($_SESSION["ACCESS_TOKEN"]);
+
+        try {
+
+            $response = $fb->get('/me?fields=roles');
+            $user = $response->getGraphUser();
+
+        } catch(Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            echo 'Graph returned an error: ' . $e->getMessage();
+            exit;
+        } catch(Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            echo 'Facebook SDK returned an error: ' . $e->getMessage();
+            exit;
         }
+
+        return $user;
     }
 
     /**
