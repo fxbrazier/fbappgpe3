@@ -21,6 +21,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureController extends Controller
 {
+    /**
+     * @Route("/myadmin", name="picture_list")
+     */
+    public function listAction(){
+        $pictures = $this->getDoctrine()
+                      ->getRepository('AppBundle:Picture')
+                      ->findAll();
+
+        return $this->render('picture/index.html.twig', array(
+            'pictures' => $pictures,
+            ));
+    }
+
 
     /**
      * @Route("/myadmin/picture/details/{id}", name="picture_details")
@@ -53,11 +66,22 @@ class PictureController extends Controller
     }
 
     /**
-     * @Route("/participate/{id}", name="picture_participate")
+     * @Route("/participate", name="picture_participate")
      */
-    public function participateAction($id, Request $request){
+    public function participateAction(Request $request){
       if ($this->get('app.user_controller')->checkIfLogAction()) {
+        $contest = $this->getDoctrine()
+                      ->getRepository('AppBundle:Contest')
+                      ->findCurrentContest(date("Y-m-d H:i:s"));
+
+        $id = $contest[0]->getId();
+
         $user = $this->get('app.user_controller')->getInfosFbAction();
+
+        $thisuser = $this->getDoctrine()
+                      ->getRepository('AppBundle:User')
+                      ->findBy(array('id_fb' => $user["id"]));
+
         $name = $user["name"];
 
         $albums = $this->get('app.user_controller')->getAlbumsFbAction();
@@ -123,7 +147,7 @@ class PictureController extends Controller
                 $picture->setName($name);
                 $picture->setLink($link_name);
                 $picture->setGeolocalisation('');
-                $picture->setidUser('1');
+                $picture->setidUser($thisuser['id']);
                 $picture->setidContest($id);  
 
                 $em = $this->getDoctrine()->getManager();
