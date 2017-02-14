@@ -167,6 +167,7 @@ class PictureController extends Controller
         $picture = $this->getDoctrine()
                       ->getRepository('AppBundle:Picture')
                       ->findOneBy(array('id' => $id));
+                      //var_dump($picture);die;
 
         return $this->render('picture/picture.html.twig', array(
             'picture' => $picture,
