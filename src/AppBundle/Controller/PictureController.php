@@ -22,19 +22,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureController extends Controller
 {
-    /**
-     * @Route("/myadmin", name="picture_list")
-     */
-    public function listAction(){
-        $pictures = $this->getDoctrine()
-                      ->getRepository('AppBundle:Picture')
-                      ->findAll();
-
-        return $this->render('picture/index.html.twig', array(
-            'pictures' => $pictures,
-            ));
-    }
-
 
     /**
      * @Route("/myadmin/picture/details/{id}", name="picture_details")

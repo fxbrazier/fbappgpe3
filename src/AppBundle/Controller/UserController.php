@@ -108,7 +108,6 @@ class UserController extends Controller
                 // actually executes the queries (i.e. the INSERT query)
                 $em->flush();
             }
-            
         }else{
             unset($_SESSION["ACCESS_TOKEN"]);
             unset($_SESSION['user_id']);

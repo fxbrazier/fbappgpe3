@@ -40,9 +40,11 @@
         <div class="row container-fluid title-page">
         
           <h2 class='text-center'>
-            <img src="{{ asset('images/tatoo-machine.png') }}" alt="">
-            CONCOURS PHOTO JANVIER 2016 PARDON MAMAN
-            <img src="{{ asset('images/tatoo-machine.png') }}" alt="">
+            <a href="{{ url('homepage') }}">
+              <img src="{{ asset('images/tatoo-machine.png') }}" alt="">
+              CONCOURS PHOTO JANVIER 2016 PARDON MAMAN
+              <img src="{{ asset('images/tatoo-machine.png') }}" alt="">
+            </a>
           </h2>
         </div>
         <div class="row">
@@ -51,8 +53,8 @@
               <!-- navbar -->
               <hr class="hr-warning " />
                 <ol class="breadcrumb bread-warning">
-                  <li><a href="#" class='menu-link'>HOME</a></li>
-                  <li><a href="#" class="menu-link">RULES</a></li>
+                  <li><a href="{{ url('homepage') }}" class='menu-link'>HOME</a></li>
+                  <li><a href="page/rules" class="menu-link">RULES</a></li>
                   <li><a href="#" class="menu-link">FINISHED CONTESTS</a></li>
                   <button href="#" class="btn btn-contest">ENTER <i class="glyphicon glyphicon-camera"></i></button>
                 </ol>
@@ -62,11 +64,10 @@
       </div>
       <div class="col-md-3 col-xs-12"></div>
     </div>  
-        
+    <!--    
     <div class="row row_filter">
       <div class="col-md-4"></div>
       <div class="col-md-2 col-xs-6">
-          <!-- Filters -->
               <div class="">
                 <button class="btn btn-default dropdown-toggle custom-dropdown-filter" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                   Filter
@@ -82,7 +83,6 @@
       </div>
 
       <div class="col-md-2 col-xs-6">
-        <!-- Search tags -->
         <div id="custom-search-input">
               <div class="input-group">
                   <input type="text" class="form-control search-input input-md" placeholder="Add tags" />
@@ -105,6 +105,7 @@
         <span class="hashtag">#photo</span>
       </div>
     </div>
+    -->
 
         <!-- Page Content -->
         <div id="wrapper2" class="container">
