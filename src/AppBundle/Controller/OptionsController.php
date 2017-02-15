@@ -23,6 +23,8 @@ class OptionsController extends Controller
      * @Route("/myadmin/options", name="option_edit")
      */
     public function updateAction(Request $request){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $_options = $this->getDoctrine()
                       ->getRepository('AppBundle:Options')
                       ->findAll();
@@ -106,6 +108,10 @@ class OptionsController extends Controller
             'form' => $form->createView()
             )
         );
+
+      }else{
+         return $this->redirectToRoute('homepage');
+      }
     }
 
 }

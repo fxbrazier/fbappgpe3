@@ -23,7 +23,8 @@ class ContestController extends Controller
      * @Route("/myadmin/contest", name="contest_list")
      */
     public function listAction(){
-      //phpinfo();
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $contests = $this->getDoctrine()
                       ->getRepository('AppBundle:Contest')
                       ->findBy(
@@ -33,12 +34,17 @@ class ContestController extends Controller
         return $this->render('contest/index.html.twig', array(
             'contests' => $contests,
             ));
+      }else{
+            return $this->redirectToRoute('homepage');
+      }
     }
 
     /**
      * @Route("/myadmin/contest/create", name="contest_create")
      */
     public function createAction(Request $request){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
     	$contest = new Contest;
       // Contest form
     	$form = $this->createFormBuilder($contest)
@@ -109,8 +115,17 @@ class ContestController extends Controller
             // Cheking form variables          
             
             $checkName = $repository->findOneByName( $name );
-
-            if( $checkName != null ){
+            if( is_null( $name )
+                ||is_null( $description )
+                ||is_null( $startDate )
+                ||is_null( $endDate )
+                ||is_null( $prize )
+                ||is_null( $status )
+            ){
+              $error = true;
+              $error_message[] = 'You need to fill all the inputs';
+            }
+            elseif( $checkName != null ){
               $error = true;
               $error_message[] = 'the name is already in use';
 
@@ -183,6 +198,9 @@ class ContestController extends Controller
               );
               return $this->redirectToRoute('contest_list');              
             }
+          }else{
+            return $this->redirectToRoute('homepage');
+          }
 
 	    }
 
@@ -193,6 +211,8 @@ class ContestController extends Controller
      * @Route("/myadmin/contest/details/{id}", name="contest_details")
      */
     public function detailsAction($id, Request $request){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $contest = $this->getDoctrine()
                       ->getRepository('AppBundle:Contest')
                       ->find($id);
@@ -201,6 +221,9 @@ class ContestController extends Controller
             'contest' => $contest
             )
         );
+      }else{
+            return $this->redirectToRoute('homepage');
+      }
     }
 
 
@@ -208,6 +231,7 @@ class ContestController extends Controller
      * @Route("/myadmin/contest/edit/{id}", name="contest_edit")
      */
     public function editAction($id, Request $request){
+     if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
         $contest = $this->getDoctrine()
                       ->getRepository('AppBundle:Contest')
                       ->find($id);
@@ -277,8 +301,19 @@ class ContestController extends Controller
           $repository = $this->getDoctrine()->getRepository('AppBundle:Contest');
           
           $checkName = $repository->findOneByName( $name );
+          if( is_null( $name )
+              ||is_null( $description )
+              ||is_null( $startDate )
+              ||is_null( $endDate )
+              ||is_null( $prize )
+              ||is_null( $status )
 
-          if( $checkName != null && $checkName->getId() != $id ){
+          ){
+            $error = true;
+            $error_message[] = 'You need to fill all the inputs';
+
+          }
+          elseif( $checkName != null && $checkName->getId() != $id ){
             $error = true;
             $error_message[] = 'the name is already in use';
 
@@ -327,7 +362,6 @@ class ContestController extends Controller
           }
 
           if( $error ){
-              // actually executes the queries (i.e. the INSERT query)
               $this->addFlash(
                 'error',
                 $error_message[0]
@@ -346,6 +380,7 @@ class ContestController extends Controller
 
             // actually executes the queries (i.e. the INSERT query)
             $em->flush();
+
             $this->addFlash(
               'notice',
               'Contest Updated'
@@ -357,12 +392,17 @@ class ContestController extends Controller
             'form' => $form->createView()
             )
         );
+          }else{
+          return $this->redirectToRoute('homepage');
+      }
     }
 
     /**
      * @Route("/myadmin/contest/delete/{id}", name="contest_delete")
      */
     public function deleteAction($id){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $em = $this->getDoctrine()
                       ->getManager();
         $contest = $em->getRepository('AppBundle:Contest')->find($id);
@@ -373,6 +413,9 @@ class ContestController extends Controller
           'Contest removed'
         );
         return $this->redirectToRoute('contest_list');
+      }else{
+            return $this->redirectToRoute('homepage');
+      }
     }
 }
 

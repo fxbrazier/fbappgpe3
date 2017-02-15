@@ -79,7 +79,6 @@ class UserController extends Controller
             if (!$id_fb) {
                 $this->createUserAction($user);
             }
-            
         }else{
             unset($_SESSION["ACCESS_TOKEN"]);
             unset($_SESSION['user_id']);

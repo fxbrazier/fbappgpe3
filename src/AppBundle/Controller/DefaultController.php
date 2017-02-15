@@ -42,7 +42,7 @@ class DefaultController extends Controller
    * @Route("/myadmin", name="picture_list")
    */
   public function listAction(){
-
+    
       $em = $this->getDoctrine()->getManager(); //we call Doctrine
 
       $query = $em->createQuery( //create the query

@@ -24,7 +24,7 @@ class PageController extends Controller
      * @Route("/page/{page_url}", name="page")
      */
     public function indexAction($page_url, Request $request){
-      
+
       $page = $this->getDoctrine()
                     ->getRepository('AppBundle:Page')
                     ->findOneByUrl($page_url);
@@ -41,7 +41,8 @@ class PageController extends Controller
      * @Route("/myadmin/pages", name="page_list")
      */
     public function listAction(){
-      //phpinfo();
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $pages = $this->getDoctrine()
                       ->getRepository('AppBundle:Page')
                       ->findAll();
@@ -49,12 +50,18 @@ class PageController extends Controller
         return $this->render('page/list.html.twig', array(
             'pages' => $pages,
             ));
+
+      }else{
+         return $this->redirectToRoute('homepage');
+      }
     }
 
     /**
      * @Route("/myadmin/page/create", name="page_create")
      */
     public function createAction(Request $request){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
     	$page = new Page;
       // Page form
     	$form = $this->createFormBuilder($page)
@@ -130,12 +137,18 @@ class PageController extends Controller
 	    }
 
 	    return $this->render('page/create.html.twig', array('form' => $form->createView()));
+
+      }else{
+         return $this->redirectToRoute('homepage');
+      }
     }
 
     /**
      * @Route("/myadmin/page/details/{id}", name="page_details")
      */
     public function detailsAction($id, Request $request){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $page = $this->getDoctrine()
                       ->getRepository('AppBundle:Page')
                       ->find($id);
@@ -144,6 +157,10 @@ class PageController extends Controller
             'page' => $page
             )
         );
+
+      }else{
+         return $this->redirectToRoute('homepage');
+      }
     }
 
 
@@ -151,6 +168,8 @@ class PageController extends Controller
      * @Route("/myadmin/page/edit/{id}", name="page_edit")
      */
     public function editAction($id, Request $request){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $page = $this->getDoctrine()
                       ->getRepository('AppBundle:Page')
                       ->find($id);
@@ -230,12 +249,18 @@ class PageController extends Controller
             'form' => $form->createView()
             )
         );
+
+      }else{
+         return $this->redirectToRoute('homepage');
+      }
     }
 
     /**
      * @Route("/myadmin/page/delete/{id}", name="page_delete")
      */
     public function deleteAction($id){
+      if( $this->get('app.user_controller')->checkIfLogAdminAction() ) {
+
         $em = $this->getDoctrine()
                       ->getManager();
         $page = $em->getRepository('AppBundle:Page')->find($id);
@@ -246,6 +271,10 @@ class PageController extends Controller
           'Page removed'
         );
         return $this->redirectToRoute('page_list');
+
+      }else{
+         return $this->redirectToRoute('homepage');
+      }
     }
 }
 
