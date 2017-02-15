@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Picture;
+use AppBundle\Entity\Picture_like;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -174,15 +175,50 @@ class PictureController extends Controller
     /**
      * @Route("/picture/{id}", name="picture_picture")
      */
-    public function pictureAction($id){
+    public function pictureAction($id, Request $request){
         $picture = $this->getDoctrine()
                       ->getRepository('AppBundle:Picture')
                       ->findOneBy(array('id' => $id));
                       //var_dump($picture);die;
 
+          $picture_like = new Picture_like();
+          $form = $this->createFormBuilder($picture_like)
+          ->add('voter', SubmitType::class, array(
+                    'attr' => array(
+                        'class' =>'btn-primary btn-lg',
+                        'style' => 'margin-bottom:15px'
+                    )))
+                ->getForm();
+                //var_dump($picture_like);die;
+
+          $form->handleRequest($request);
+
+          //var_dump($nb);die;
+          //handle request add contest form
+          if($form->isSubmitted() && $form->isValid()){
+
+                $id_picture = $id;
+                $id_user = '1'; 
+
+                $picture_like->setIdPicture($id_picture);
+                $picture_like->setIdUser($id_user); 
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($picture_like);
+
+                // actually executes the queries (i.e. the INSERT query)
+                $em->flush(); 
+          }
+          
+          $nb = $this->getDoctrine()
+                      ->getRepository('AppBundle:Picture_like')
+                      ->findNbLike($id);
+
         return $this->render('picture/picture.html.twig', array(
             'picture' => $picture,
-            ));
+            'form' => $form->createView(),
+            'nb' => $nb
+        ));
     }
 }
 

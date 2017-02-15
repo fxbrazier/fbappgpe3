@@ -7,12 +7,12 @@
                     <div class="product-gallery">
                     {% if pictures is defined %}
                         {% for picture in pictures %}
-                            <a href="http://localhost/fbappgpe3/web/app_dev.php/picture/{{ picture.id }}">
                                 <div class="picture_min">
+                                <a href="http://localhost/fbappgpe3/web/app_dev.php/picture/{{ picture.id }}">
                                       <div class="top_part">
                                           <div class="middle">
                                               <h1 id="title">{{ picture.name }}</h1>
-                                              <h2 id="rank">1</h2>
+                                              <h2 id="rank"></h2>
                                               {% if picture.hebergement == 'facebook' %}
                                                 <div class="image_div"><img class="image" src="{{ picture.link }}" alt="User picture"></div>
                                               {% else %}
@@ -25,8 +25,8 @@
                                       <div class="bottom_part">
                                           <div class="bottom_middle">By {{ picture.getIdUser }}</div>
                                       </div>
+                                </a>
                                 </div>
-                            </a>
                         {% endfor %}
                     {% else %}
                         <p>Il n'y a aucun concours actuellement</p>
