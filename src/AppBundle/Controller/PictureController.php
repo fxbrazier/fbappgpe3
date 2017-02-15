@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Picture;
+use AppBundle\Entity\Picture_like;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -21,6 +22,19 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PictureController extends Controller
 {
+    /**
+     * @Route("/myadmin", name="picture_list")
+     */
+    public function listAction(){
+        $pictures = $this->getDoctrine()
+                      ->getRepository('AppBundle:Picture')
+                      ->findAll();
+
+        return $this->render('picture/index.html.twig', array(
+            'pictures' => $pictures,
+            ));
+    }
+
 
     /**
      * @Route("/myadmin/picture/details/{id}", name="picture_details")
@@ -53,11 +67,22 @@ class PictureController extends Controller
     }
 
     /**
-     * @Route("/participate/{id}", name="picture_participate")
+     * @Route("/participate", name="picture_participate")
      */
-    public function participateAction($id, Request $request){
+    public function participateAction(Request $request){
       if ($this->get('app.user_controller')->checkIfLogAction()) {
+        $contest = $this->getDoctrine()
+                      ->getRepository('AppBundle:Contest')
+                      ->findCurrentContest(date("Y-m-d H:i:s"));
+
+        $id = $contest[0]->getId();
+
         $user = $this->get('app.user_controller')->getInfosFbAction();
+
+        $thisuser = $this->getDoctrine()
+                      ->getRepository('AppBundle:User')
+                      ->findBy(array('id_fb' => $user["id"]));
+
         $name = $user["name"];
 
         $albums = $this->get('app.user_controller')->getAlbumsFbAction();
@@ -123,7 +148,7 @@ class PictureController extends Controller
                 $picture->setName($name);
                 $picture->setLink($link_name);
                 $picture->setGeolocalisation('');
-                $picture->setidUser('1');
+                $picture->setidUser($thisuser['id']);
                 $picture->setidContest($id);  
 
                 $em = $this->getDoctrine()->getManager();
@@ -150,15 +175,50 @@ class PictureController extends Controller
     /**
      * @Route("/picture/{id}", name="picture_picture")
      */
-    public function pictureAction($id){
+    public function pictureAction($id, Request $request){
         $picture = $this->getDoctrine()
                       ->getRepository('AppBundle:Picture')
                       ->findOneBy(array('id' => $id));
                       //var_dump($picture);die;
 
+          $picture_like = new Picture_like();
+          $form = $this->createFormBuilder($picture_like)
+          ->add('voter', SubmitType::class, array(
+                    'attr' => array(
+                        'class' =>'btn-primary btn-lg',
+                        'style' => 'margin-bottom:15px'
+                    )))
+                ->getForm();
+                //var_dump($picture_like);die;
+
+          $form->handleRequest($request);
+
+          //var_dump($nb);die;
+          //handle request add contest form
+          if($form->isSubmitted() && $form->isValid()){
+
+                $id_picture = $id;
+                $id_user = '1'; 
+
+                $picture_like->setIdPicture($id_picture);
+                $picture_like->setIdUser($id_user); 
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($picture_like);
+
+                // actually executes the queries (i.e. the INSERT query)
+                $em->flush(); 
+          }
+          
+          $nb = $this->getDoctrine()
+                      ->getRepository('AppBundle:Picture_like')
+                      ->findNbLike($id);
+
         return $this->render('picture/picture.html.twig', array(
             'picture' => $picture,
-            ));
+            'form' => $form->createView(),
+            'nb' => $nb
+        ));
     }
 }
 

@@ -387,9 +387,6 @@ class UserController extends Controller
     }
 
     /**
-    * @Route("/login_admin_check", name="login_admin_check")
-    */
-    /**
      * @Route("/login_admin_check", name="login_admin_check")
      */
     public function checkIfLogAdminAction()
