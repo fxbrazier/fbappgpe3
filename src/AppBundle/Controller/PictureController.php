@@ -78,12 +78,9 @@ class PictureController extends Controller
         $id = $contest[0]->getId();
 
         $user = $this->get('app.user_controller')->getInfosFbAction();
+        //var_dump($user);die;
 
-        $thisuser = $this->getDoctrine()
-                      ->getRepository('AppBundle:User')
-                      ->findBy(array('id_fb' => $user["id"]));
-
-        $name = $user["name"];
+        $name = $user["first_name"].' '.$user["last_name"];
 
         $albums = $this->get('app.user_controller')->getAlbumsFbAction();
 
@@ -126,6 +123,14 @@ class PictureController extends Controller
           //handle request add contest form
           if($form->isSubmitted() && $form->isValid()){
 
+            $user = $this->get('app.user_controller')->getInfosFbAction();
+
+            //on récupère l'utilisateur
+            $thisUser = $this->getDoctrine()
+                      ->getRepository('AppBundle:User')
+                      ->findOneBy(array('id_fb' => $user['id']));
+                      //var_dump($thisUser->getId());die;
+
                 $hebergement = $form['hebergement']->getData();
                 $name = $form['name']->getData();
                 if ($hebergement == 'facebook') {
@@ -148,7 +153,7 @@ class PictureController extends Controller
                 $picture->setName($name);
                 $picture->setLink($link_name);
                 $picture->setGeolocalisation('');
-                $picture->setidUser($thisuser['id']);
+                $picture->setidUser($thisUser->getId());
                 $picture->setidContest($id);  
 
                 $em = $this->getDoctrine()->getManager();
@@ -179,7 +184,6 @@ class PictureController extends Controller
         $picture = $this->getDoctrine()
                       ->getRepository('AppBundle:Picture')
                       ->findOneBy(array('id' => $id));
-                      //var_dump($picture);die;
 
           $picture_like = new Picture_like();
           $form = $this->createFormBuilder($picture_like)
@@ -190,15 +194,33 @@ class PictureController extends Controller
                     )))
                 ->getForm();
                 //var_dump($picture_like);die;
+          $url = 'http://localhost/fbappgpe3/web/app_dev.php/loginVote';
+
+          if ($this->get('app.user_controller')->checkIfLogAction()) {
+            $log = true;
+          }else{
+            $log = false;
+          }
 
           $form->handleRequest($request);
 
-          //var_dump($nb);die;
           //handle request add contest form
           if($form->isSubmitted() && $form->isValid()){
+            $user = $this->get('app.user_controller')->getInfosFbAction();
 
-                $id_picture = $id;
-                $id_user = '1'; 
+            //on récupère l'utilisateur
+            $thisUser = $this->getDoctrine()
+                      ->getRepository('AppBundle:User')
+                      ->findOneBy(array('id_fb' => $user['id']));
+                      //var_dump($thisUser->getId());die;
+
+            //verif unicité vote
+            $vote = $this->getDoctrine()
+                      ->getRepository('AppBundle:Picture_like')
+                      ->findOneBy(array('id_picture' => $id, 'id_user' => $thisUser->getId()));
+            if (!$vote) {
+              $id_picture = $id;
+                $id_user = $thisUser->getId(); 
 
                 $picture_like->setIdPicture($id_picture);
                 $picture_like->setIdUser($id_user); 
@@ -208,8 +230,9 @@ class PictureController extends Controller
 
                 // actually executes the queries (i.e. the INSERT query)
                 $em->flush(); 
+            }
           }
-          
+
           $nb = $this->getDoctrine()
                       ->getRepository('AppBundle:Picture_like')
                       ->findNbLike($id);
@@ -217,7 +240,9 @@ class PictureController extends Controller
         return $this->render('picture/picture.html.twig', array(
             'picture' => $picture,
             'form' => $form->createView(),
-            'nb' => $nb
+            'nb' => $nb,
+            'url' => $url,
+            'log' => $log
         ));
     }
 }

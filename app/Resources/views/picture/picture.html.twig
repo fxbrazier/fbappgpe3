@@ -5,9 +5,13 @@
         <div id="container">
             <img src="{{ picture.link }}">
             
-            {{form_start(form)}}
-            {{form_widget(form)}}
-            {{form_end(form)}}
+            {% if log == true %}
+                {{form_start(form)}}
+                {{form_widget(form)}}
+                {{form_end(form)}}
+            {% else %}
+            <a href="{{ url }}">Vous devez être connecté pour voter</a>
+            {% endif %}
 
             {{ nb[0][1] }} votes actuellement !
         </div>

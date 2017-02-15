@@ -21,12 +21,10 @@ class DefaultController extends Controller
                       ->findCurrentContest(date("Y-m-d H:i:s"));
 
         $id = $contest[0]->getId();
-        //var_dump($contest);die;
 
         $pictures = $this->getDoctrine()
                       ->getRepository('AppBundle:Picture')
                       ->findBy(array('id_contest' => $id));
-        //var_dump($pictures);die;
 
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig', [

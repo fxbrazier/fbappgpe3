@@ -43,6 +43,25 @@ class UserController extends Controller
     }
 
     /**
+    * @Route("/loginVote", name="login_vote")
+    */
+    public function loginVoteAction($msg)
+    {
+        if (!session_id()) {
+            session_start();
+        }
+
+        $fb = $this->getFacebook();
+        $helper = $fb->getRedirectLoginHelper();
+        $permissions = ['email']; // Optional permissions
+        $loginUrl = $helper->getLoginUrl('http://localhost/fbappgpe3/web/app_dev.php/loginCallback', $permissions);
+
+        return $this->render('user/login.html.twig', array(
+            'url' => $loginUrl
+            ));
+    }
+
+    /**
      * @Route("/loginCallback", name="login_callback")
      */
     public function loginCallbackAction()
@@ -77,7 +96,17 @@ class UserController extends Controller
 
             //si il existe pas, on le créé
             if (!$id_fb) {
-                $this->createUserAction($user);
+                $this_user = new User();
+                $this_user->setFirstName($user['first_name']);
+                $this_user->setLastName($user['last_name']);
+                $this_user->setEmail($user['email']);
+                $this_user->setIdFb($user['id']);     
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($this_user);      
+
+                // actually executes the queries (i.e. the INSERT query)
+                $em->flush();
             }
             
         }else{
@@ -176,31 +205,6 @@ class UserController extends Controller
         }else{
             return $this->redirectToRoute('login');
         }
-    }
-
-    /**
-     * @Route("/createUser", name="user_create")
-     */
-    public function createUserAction($user)
-    {
-        $new_user = new User();
-        $new_user->setFirstname($user['first_name']);
-        $new_user->setLastname($user['last_name']);
-        $new_user->setEmail($user['email']);
-        $new_user->setBirthday('');
-        $new_user->setGender('');
-        $new_user->setTel('');
-        $new_user->setCity('');
-        $new_user->setIsDeleted('');
-        $new_user->setIsCreated(date("Y-m-d H:i:s"));
-        $new_user->setStatus('');
-        $new_user->setIdFb($user['id']);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($new_user); 
-
-        // actually executes the queries (i.e. the INSERT query)
-        $em->flush();
     }
 
     /**
