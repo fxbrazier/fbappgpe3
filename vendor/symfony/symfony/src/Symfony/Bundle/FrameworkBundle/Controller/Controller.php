@@ -419,8 +419,8 @@ abstract class Controller implements ContainerAwareInterface
         return $this->container->get('security.csrf.token_manager')->isTokenValid(new CsrfToken($id, $token));
     }
 
-    protected $app_id = '1780532462163734';
-    protected $app_secret = '48f112e5053eb831fc2393a5447a3e84';
+    protected $app_id = '';
+    protected $app_secret = '';
 
     protected function getFacebook(){
         return $fb = new Facebook\Facebook([
